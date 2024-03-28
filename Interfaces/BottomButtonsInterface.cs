@@ -92,13 +92,16 @@ namespace nterrautils.Interfaces
 					int TabWidth = PaddingWidth * 2 + (int)Font.MeasureString(ButtonTexts[i]).X + ButtonDrawRect[i].Width;
 					if (DrawTabFull(ButtonStartPosition, TabWidth, ButtonTexts[i], ButtonTexture[i], ButtonDrawRect[i], Buttons[i].TabColor))
 					{
-						if (SelectedTab == i)
+						if (!Buttons[i].JustAButton)
 						{
-							SelectedTab = -1;
-						}
-						else
-						{
-							SelectedTab = i;
+							if (SelectedTab == i)
+							{
+								SelectedTab = -1;
+							}
+							else
+							{
+								SelectedTab = i;
+							}
 						}
 						Buttons[i].OnClickAction(SelectedTab > -1);
 					}
@@ -115,7 +118,7 @@ namespace nterrautils.Interfaces
 		{
 			if (Width == 0) return false;
 			int StartX = (int)Position.X, StartY = (int)Position.Y;
-			Texture2D Background = nterrautils.BottomButtonTexture.Value;
+			Texture2D Background = MainMod.BottomButtonTexture.Value;
 			const int PartDimensions = 16;
 			for (int y = 0; y < 2; y++)
 			{
@@ -147,7 +150,7 @@ namespace nterrautils.Interfaces
 				Main.mouseY >= Position.Y && Main.mouseY < Position.Y + Height;
 			if (MouseOver)
 			{
-				Main.LocalPlayer.mouseInterface = true;
+				MainMod.GetPlayerCharacter().mouseInterface = true;
 			}
 			return MouseOver;
 		}

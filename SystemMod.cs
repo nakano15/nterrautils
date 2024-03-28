@@ -9,15 +9,19 @@ namespace nterrautils
         public class SystemMod : ModSystem
         {
                 static BottomButtonsInterface BottomInterfaceDef;
+                static QuestInterface QuestInterfaceDef;
 
                 public override void Load()
                 {
                         BottomInterfaceDef = new BottomButtonsInterface();
+                        QuestInterfaceDef = new QuestInterface();
                 }
 
                 public override void Unload()
                 {
                         BottomInterfaceDef = null;
+                        QuestInterface.Unload();
+                        QuestInterfaceDef = null;
                 }
 
                 public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -34,6 +38,7 @@ namespace nterrautils
                         }
                         if (InventoryPos > -1)
                         {
+                                layers.Insert(InventoryPos, QuestInterfaceDef);
                                 layers.Insert(InventoryPos, BottomInterfaceDef);
                         }
                 }

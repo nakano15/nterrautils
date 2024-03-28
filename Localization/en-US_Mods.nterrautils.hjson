@@ -1,1 +1,18 @@
-
+Interface: {
+	QuestLog: {
+		Title: Quests
+		NextPage: Next
+		PreviousPage: Previous
+		PageNumber: Page: {cur}/{total}
+		ScrollUp: Scroll Up
+		ScrollDown: Scroll Down
+		NoQuestSelected: No Quest Selected
+		Active: Active
+		Completed: Completed
+		DefaultQuestStatistics:
+			'''
+			Active Quests: {active}
+			Completed Quests: {completed}
+			'''
+	}
+}

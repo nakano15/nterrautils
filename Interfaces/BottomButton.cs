@@ -10,6 +10,7 @@ namespace nterrautils
         public virtual Color TabColor => Color.White;
         public virtual int InternalWidth => 300;
         public virtual int InternalHeight => 200;
+        public virtual bool JustAButton => false;
 
         public virtual void OnClickAction(bool OpeningTab)
         {
