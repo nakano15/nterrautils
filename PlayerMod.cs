@@ -86,6 +86,7 @@ namespace nterrautils
                     if (qd == null)
                     {
                         qd = qb.GetQuestData;
+                        qd.Initialize(qb);
                         _QuestDatas.Add(qd);
                     }
                     qd.LoadQuest(tag, QuestID);

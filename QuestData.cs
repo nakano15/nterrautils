@@ -47,6 +47,16 @@ namespace nterrautils
             Load(load, QuestID, LastVersion);
         }
 
+        internal void Initialize(QuestBase Quest)
+        {
+            OnInitialize(Quest);
+        }
+
+        protected virtual void OnInitialize(QuestBase Quest)
+        {
+
+        }
+
         protected virtual void Save(TagCompound save, string QuestID)
         {
             

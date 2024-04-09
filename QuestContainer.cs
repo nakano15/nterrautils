@@ -59,6 +59,7 @@ namespace nterrautils
                         QuestData data = quest.GetQuestData;
                         data.ID = id;
                         data.ModID = ModID;
+                        data.Initialize(quest);
                         player.QuestDatas.Add(data);
                     }
                 }

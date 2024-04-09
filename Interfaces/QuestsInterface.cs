@@ -109,7 +109,7 @@ namespace nterrautils
             int QuestInfoHeight = ActiveTab ? QuestInfoHeightWithCurObjective : QuestInfoHeightFull;
             {
                 DrawBackgroundPanel(Position, QuestInfoWidth, QuestInfoHeight, InnerPannelColor);
-                int MaxQuestInfoLines = MaxLinesOnQuestInfo;
+                int MaxQuestInfoLines = MaxLinesOnQuestInfo - 1;
                 if (ActiveTab)
                     MaxQuestInfoLines -= 2;
                 for (int i = 0; i < MaxQuestInfoLines; i++)
