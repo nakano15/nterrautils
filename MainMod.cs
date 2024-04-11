@@ -26,6 +26,7 @@ namespace nterrautils
 				Interfaces.BottomButtonsInterface.AddNewTab(new Interfaces.Tabs.QuestLogTab());
 			}
 			QuestContainer.Initialize();
+			//QuestContainer.AddQuestContainer(this, new TestContainer()); //Used only for testing purposes.
         }
 
         public override void Unload()

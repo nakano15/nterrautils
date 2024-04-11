@@ -147,10 +147,7 @@ namespace nterrautils
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
-            for(int o = 0; o < Base.Objectives.Count; o++)
-            {
-                Base.Objectives[o].OnMobKill(killedNpc, Data.ObjectiveDatas[o]);
-            }
+            Base.OnMobKill(killedNpc, Data);
         }
 
         public override void UpdatePlayer(Player player, QuestData data)
@@ -158,10 +155,11 @@ namespace nterrautils
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
+            Base.UpdatePlayer(player, Data);
             bool AnyIncompleteObjective = false;
             for(int o = 0; o < Base.Objectives.Count; o++)
             {
-                Base.Objectives[o].UpdatePlayer(player, Data.ObjectiveDatas[o]);
+                //Base.Objectives[o].UpdatePlayer(player, Data.ObjectiveDatas[o]);
                 if (!Base.Objectives[o].IsCompleted(Data.ObjectiveDatas[o]))
                 {
                     AnyIncompleteObjective = true;
@@ -175,10 +173,7 @@ namespace nterrautils
 
         void ChangeStep(Player player, ModularQuestStep Base, ModularQuestStepData Data, QuestData qdata)
         {
-            for (int d = 0; d < Data.ObjectiveDatas.Length; d++)
-            {
-                Base.Objectives[d].OnStepChange(player, Data.ObjectiveDatas[d]);
-            }
+            Base.OnStepChange(player, Data);
             ModularQuestData data = qdata as ModularQuestData;
             QuestSteps[data.Step].OnQuestStepEnd(player, Data);
             data.Step++;
@@ -230,10 +225,7 @@ namespace nterrautils
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
-            for(int o = 0; o < Base.Objectives.Count; o++)
-            {
-                Base.Objectives[o].OnTalkToNpc(npc, Data.ObjectiveDatas[o]);
-            }
+            Base.OnTalkToNpc(npc, Data);
         }
 
         public override string QuestNpcDialogue(NPC npc, QuestData data, out bool BlockOtherMessages)
@@ -242,15 +234,7 @@ namespace nterrautils
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return "";
-            for(int o = 0; o < Base.Objectives.Count; o++)
-            {
-                string s = Base.Objectives[o].QuestNpcDialogue(npc, Data.ObjectiveDatas[o], out BlockOtherMessages);
-                if (BlockOtherMessages)
-                {
-                    return s;
-                }
-            }
-            return "";
+            return Base.QuestNpcDialogue(npc, Data, out BlockOtherMessages);
         }
 
         protected ModularQuestStep AddNewQuestStep()
@@ -258,6 +242,11 @@ namespace nterrautils
             ModularQuestStep NewStep = new ModularQuestStep();
             QuestSteps.Add(NewStep);
             return NewStep;
+        }
+
+        protected void AddCustomQuestStep(ModularQuestStep CustomStep)
+        {
+            QuestSteps.Add(CustomStep);
         }
 
         public class ModularQuestStep
@@ -289,6 +278,59 @@ namespace nterrautils
                     }
                 }
                 return true;
+            }
+            
+            public virtual bool IsCompleted(ObjectiveData Data)
+            {
+                return true;
+            }
+
+            public virtual string ObjectiveText(ModularQuestStepData Data)
+            {
+                return "";
+            }
+
+            public virtual void UpdatePlayer(Player player, ModularQuestStepData data)
+            {
+                for(int o = 0; o < Objectives.Count; o++)
+                {
+                    Objectives[o].UpdatePlayer(player, data.ObjectiveDatas[o]);
+                }
+            }
+
+            public virtual void OnMobKill(NPC killedNpc, ModularQuestStepData data)
+            {
+                for(int o = 0; o < Objectives.Count; o++)
+                {
+                    Objectives[o].OnMobKill(killedNpc, data.ObjectiveDatas[o]);
+                }
+            }
+
+            public virtual void OnTalkToNpc(NPC npc, ModularQuestStepData data)
+            {
+                for(int o = 0; o < Objectives.Count; o++)
+                {
+                    Objectives[o].OnTalkToNpc(npc, data.ObjectiveDatas[o]);
+                }
+            }
+
+            public virtual void OnStepChange(Player player, ModularQuestStepData data)
+            {
+                for(int o = 0; o < Objectives.Count; o++)
+                {
+                    Objectives[o].OnStepChange(player, data.ObjectiveDatas[o]);
+                }
+            }
+
+            public virtual string QuestNpcDialogue(NPC npc, ModularQuestStepData data, out bool BlockOtherMessages)
+            {
+                BlockOtherMessages = false;
+                for(int o = 0; o < Objectives.Count; o++)
+                {
+                    string s = Objectives[o].QuestNpcDialogue(npc, data.ObjectiveDatas[o], out BlockOtherMessages);
+                    if (s != "") return s;
+                }
+                return "";
             }
 
             public void AddNewObjective(ObjectiveBase NewObjective)
@@ -398,7 +440,7 @@ namespace nterrautils
             public virtual string QuestNpcDialogue(NPC npc, ObjectiveData data, out bool BlockOtherMessages)
             {
                 BlockOtherMessages = false;
-                return null;
+                return "";
             }
         }
 
