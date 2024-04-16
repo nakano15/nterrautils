@@ -1,1 +1,24 @@
-N Terraria Utilities is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+This mod is a utility mod (or library mod if you preffer) which adds some extra functions that 
+other mods might make use of.
+
+By itself, this mod doesn't do much.
+
+Some of the functions this mod offers is adding tabs to the bottom part of the screen when the 
+inventory is opened (which other mods can also use to add more tabs for their mods functions),
+and a quest system.
+
+You can find the discord of the mod bellow if you have questions:
+https://discord.gg/Bz6vwUa7X3
+
+And you can also join the Steam Group chat, if you want to find updates on your activities feed 
+when I launch an update, or to join the group chat:
+https://steamcommunity.com/groups/Nakano15-Modding
+
+If you are curious about how the mod works, you can check its github.
+As for contribution, better reach me first:
+https://github.com/nakano15/nterrautils
+
+If you like what I do, check my game projects:
+https://nakano15.itch.io
+
+I hope this library be handy for you :).
