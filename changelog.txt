@@ -1,3 +1,0 @@
-Added a quest tracker to the mod.
- => To track a quest, simply open the quest list, and have a quest selected.
- => To untrack quest, click the quest name again on the quest log.

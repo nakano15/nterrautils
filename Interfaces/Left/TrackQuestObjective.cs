@@ -22,7 +22,14 @@ namespace nterrautils
             QuestData quest = pm.QuestDatas[pm.TrackedQuest];
             Utils.DrawBorderString(Main.spriteBatch, quest.Name, new Vector2(8, PositionY), Color.Yellow, 1f);
             PositionY += 25;
-            Utils.DrawBorderString(Main.spriteBatch, quest.GetObjective, new Vector2(8, PositionY), Color.White, 0.8f);
+            if (quest.IsCompleted)
+            {
+                Utils.DrawBorderString(Main.spriteBatch, "Quest is Completed.", new Vector2(8, PositionY), Color.White, 0.8f);
+            }
+            else
+            {
+                Utils.DrawBorderString(Main.spriteBatch, quest.GetObjective, new Vector2(8, PositionY), Color.White, 0.8f);
+            }
             PositionY += 20;
         }
     }
