@@ -14,7 +14,7 @@ namespace nterrautils
 		static Mod _Mod;
 		internal static Mod GetMod => _Mod;
 		internal static string GetModName => _Mod.Name;
-        internal const int SaveVersion = 0;
+        internal const int SaveVersion = 1;
 
         public override void Load()
         {
@@ -26,12 +26,18 @@ namespace nterrautils
 				Interfaces.BottomButtonsInterface.AddNewTab(new Interfaces.Tabs.QuestLogTab());
 			}
 			QuestContainer.Initialize();
-			//QuestContainer.AddQuestContainer(this, new TestContainer()); //Used only for testing purposes.
+			QuestContainer.AddQuestContainer(this, new TestContainer()); //Used only for testing purposes.
+        }
+
+        public override void PostSetupContent()
+        {
+			Interfaces.LeftScreenInterface.AddInterfaceElement(new TrackQuestObjective());
         }
 
         public override void Unload()
         {
 			Interfaces.BottomButtonsInterface.Unload();
+			Interfaces.LeftScreenInterface.Unload();
 			BottomButtonTexture = null;
 			QuestContainer.Unload();
 			ModCompatibility.TerraGuardiansMod.Unload();

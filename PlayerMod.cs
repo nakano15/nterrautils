@@ -14,6 +14,7 @@ namespace nterrautils
         
         public List<QuestData> QuestDatas { get { return _QuestDatas; } internal set { _QuestDatas = value; } }
         List<QuestData> _QuestDatas = new List<QuestData>();
+        public int TrackedQuest = -1;
 
         public static List<QuestData> GetPlayerQuests(Player p)
         {
@@ -58,6 +59,13 @@ namespace nterrautils
                 tag.Add("ModID_" + ID, quest.ModID);
                 quest.SaveQuest(tag, ID);
             }
+            bool TrackingQuest = TrackedQuest > -1 && TrackedQuest < QuestDatas.Count;
+            tag.Add("IsTrackingQuest", TrackingQuest);
+            if (TrackingQuest)
+            {
+                tag.Add("TrackedQuestID", QuestDatas[TrackedQuest].ID);
+                tag.Add("TrackedQuestModID", QuestDatas[TrackedQuest].ModID);
+            }
         }
 
         public override void LoadData(TagCompound tag)
@@ -90,6 +98,23 @@ namespace nterrautils
                         _QuestDatas.Add(qd);
                     }
                     qd.LoadQuest(tag, QuestID);
+                }
+            }
+            if (LastVersion >= 1)
+            {
+                TrackedQuest = -1;
+                if (tag.GetBool("IsTrackingQuest"))
+                {
+                    uint ID = tag.Get<uint>("TrackedQuestID");
+                    string ModID = tag.GetString("TrackedQuestModID");
+                    for(int q = 0; q < QuestDatas.Count; q++)
+                    {
+                        if (QuestDatas[q].ID == ID && QuestDatas[q].ModID == ModID)
+                        {
+                            TrackedQuest = q;
+                            break;
+                        }
+                    }
                 }
             }
         }

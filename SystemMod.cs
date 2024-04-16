@@ -10,11 +10,13 @@ namespace nterrautils
         {
                 static BottomButtonsInterface BottomInterfaceDef;
                 static QuestInterface QuestInterfaceDef;
+                static LeftScreenInterface LeftScreenInterfaceDef;
 
                 public override void Load()
                 {
                         BottomInterfaceDef = new BottomButtonsInterface();
                         QuestInterfaceDef = new QuestInterface();
+                        LeftScreenInterfaceDef = new LeftScreenInterface();
                 }
 
                 public override void Unload()
@@ -22,6 +24,7 @@ namespace nterrautils
                         BottomInterfaceDef = null;
                         QuestInterface.Unload();
                         QuestInterfaceDef = null;
+                        LeftScreenInterfaceDef = null;
                 }
 
                 public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -40,6 +43,7 @@ namespace nterrautils
                         {
                                 layers.Insert(InventoryPos, QuestInterfaceDef);
                                 layers.Insert(InventoryPos, BottomInterfaceDef);
+                                layers.Insert(InventoryPos, LeftScreenInterfaceDef);
                         }
                 }
         }

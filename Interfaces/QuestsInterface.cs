@@ -292,9 +292,11 @@ namespace nterrautils
                 QuestName = quests[NewQuest].Name;
                 ChangeQuestObjectiveText(quests[NewQuest].GetObjective);
                 ChangeQuestStoryText(quests[NewQuest].GetStory);
+                MainMod.GetPlayerCharacter().GetModPlayer<PlayerMod>().TrackedQuest = SelectedQuest;
                 return;
             }
             SelectedQuest = -1;
+            MainMod.GetPlayerCharacter().GetModPlayer<PlayerMod>().TrackedQuest = -1;
             QuestName = GetTranslation("NoQuestSelected");
             ShowDefaultStatistics();
             ChangeQuestObjectiveText("");
