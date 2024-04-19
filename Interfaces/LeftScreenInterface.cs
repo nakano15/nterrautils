@@ -14,6 +14,7 @@ namespace nterrautils.Interfaces
     public class LeftScreenInterface : LegacyGameInterfaceLayer
     {
         static List<LeftInterfaceElement> InterfaceElements = new List<LeftInterfaceElement>();
+        internal static float YOffset = 0;
 
         public static void AddInterfaceElement(LeftInterfaceElement NewElement)
         {
@@ -38,7 +39,7 @@ namespace nterrautils.Interfaces
         {
             if (!Main.playerInventory)
             {
-                float PositionY = 120;
+                float PositionY = 120 + YOffset;
                 foreach (LeftInterfaceElement element in InterfaceElements)
                 {
                     if (element.IsVisible)

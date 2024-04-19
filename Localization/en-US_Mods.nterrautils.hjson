@@ -16,3 +16,14 @@ Interface: {
 			'''
 	}
 }
+
+Configs: {
+	ConfigMod: {
+		DisplayName: Config Mod
+
+		SideBarVerticalYOffset: {
+			Label: Side Bar Vertical Y Offset
+			Tooltip: Changes the vertical positioning of the information sidebar by a sum of this value.
+		}
+	}
+}
