@@ -350,13 +350,13 @@ namespace nterrautils
 
         static void ChangeQuestStoryText(string NewText)
         {
-            SelectedQuestProgress = MainMod.WordwrapText(NewText, FontAssets.MouseText.Value, QuestInfoWidth - 8);
+            SelectedQuestProgress = InterfaceHelper.WordwrapText(NewText, FontAssets.MouseText.Value, QuestInfoWidth - 8);
             MaxQuestStoryPages = (int)MathF.Max(0, (SelectedQuestProgress.Length + 1) / MaxLinesOnQuestInfo);
         }
 
         static void ChangeQuestObjectiveText(string NewObjective)
         {
-            SelectedQuestObjective = MainMod.WordwrapText(NewObjective, FontAssets.MouseText.Value, QuestInfoWidth - 8);
+            SelectedQuestObjective = InterfaceHelper.WordwrapText(NewObjective, FontAssets.MouseText.Value, QuestInfoWidth - 8);
         }
 
         public static void Close()

@@ -1,2 +1,5 @@
 Added a vertical offset position changer for the side bar elements.
 Added InterfaceHelper class.
+Made the mod no longer extract its source and resources.
+ => Beside, there is the Github page to get the source from, so doesn't make sense this.
+Moved WordWrap method from MainMod to InterfaceHelper.
