@@ -1,1 +1,2 @@
 Added a vertical offset position changer for the side bar elements.
+Added InterfaceHelper class.
