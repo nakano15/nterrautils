@@ -28,7 +28,7 @@ namespace nterrautils
             foreach (QuestData q in PlayerMod.GetPlayerQuests(MainMod.GetPlayerCharacter()))
             {
                 string s = q.Base.QuestNpcDialogue(npc, q, out bool BlockOtherMessages);
-                if (s != "") chat = s;
+                if (s != "" && s != null) chat = s;
                 if (BlockOtherMessages)
                     break;
             }

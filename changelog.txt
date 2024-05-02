@@ -3,3 +3,5 @@ Added InterfaceHelper class.
 Made the mod no longer extract its source and resources.
  => Beside, there is the Github page to get the source from, so doesn't make sense this.
 Moved WordWrap method from MainMod to InterfaceHelper.
+Fixed a crash this mod would cause on npcs dialogues, when there was a quest available.
+Made the Quest interface go back to first page when changing quests.

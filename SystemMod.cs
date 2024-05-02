@@ -11,12 +11,14 @@ namespace nterrautils
                 static BottomButtonsInterface BottomInterfaceDef;
                 static QuestInterface QuestInterfaceDef;
                 static LeftScreenInterface LeftScreenInterfaceDef;
+                static MouseOverInterface MouseOverInterfaceDef;
 
                 public override void Load()
                 {
                         BottomInterfaceDef = new BottomButtonsInterface();
                         QuestInterfaceDef = new QuestInterface();
                         LeftScreenInterfaceDef = new LeftScreenInterface();
+                        MouseOverInterfaceDef = new MouseOverInterface();
                 }
 
                 public override void Unload()
@@ -25,11 +27,12 @@ namespace nterrautils
                         QuestInterface.Unload();
                         QuestInterfaceDef = null;
                         LeftScreenInterfaceDef = null;
+                        MouseOverInterfaceDef = null;
                 }
 
                 public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
                 {
-                        int InventoryPos = -1;
+                        int InventoryPos = -1, MouseOver = -1;
                         for (int i = 0; i < layers.Count; i++)
                         {
                                 switch(layers[i].Name)
@@ -37,7 +40,14 @@ namespace nterrautils
                                         case "Vanilla: Inventory":
                                                 InventoryPos = i;
                                                 break;
+                                        case "Vanilla: Mouse Over":
+                                                MouseOver = i;
+                                                break;
                                 }
+                        }
+                        if (MouseOver > -1)
+                        {
+                                layers.Insert(InventoryPos, MouseOverInterfaceDef);
                         }
                         if (InventoryPos > -1)
                         {

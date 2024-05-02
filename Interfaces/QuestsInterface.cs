@@ -293,6 +293,7 @@ namespace nterrautils
                 ChangeQuestObjectiveText(quests[NewQuest].GetObjective);
                 ChangeQuestStoryText(quests[NewQuest].GetStory);
                 MainMod.GetPlayerCharacter().GetModPlayer<PlayerMod>().TrackedQuest = SelectedQuest;
+                QuestStoryPage = 0;
                 return;
             }
             SelectedQuest = -1;
