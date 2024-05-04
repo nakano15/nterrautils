@@ -31,6 +31,7 @@ namespace nterrautils
         readonly static string[] QuestTabsText = new string[] { "Active", "Completed" };
         static byte QuestTab = 0;
         static int SelectedQuest = -1;
+        static bool IsCompletedQuest = false;
         static int MaxQuestsInListDisplay = 0, MaxLinesOnQuestInfo = 0;
         static int QuestListScroll = 0;
         static int QuestStoryPage = 0, MaxQuestStoryPages = 0;
@@ -93,7 +94,7 @@ namespace nterrautils
                 Utils.DrawBorderString(Main.spriteBatch, Text, TextPosition, Color.White, anchorx: .5f);
             }
             Position.Y += 34;
-            bool ActiveTab = SelectedQuest > -1 && QuestTab == 0;
+            bool ActiveTab = SelectedQuest > -1 && QuestTab == 0 && !IsCompletedQuest;
             if (ActiveTab)
             {
                 DrawBackgroundPanel(Position, QuestInfoWidth, 60, InnerPannelColor);
@@ -292,10 +293,12 @@ namespace nterrautils
                 QuestName = quests[NewQuest].Name;
                 ChangeQuestObjectiveText(quests[NewQuest].GetObjective);
                 ChangeQuestStoryText(quests[NewQuest].GetStory);
+                IsCompletedQuest = quests[NewQuest].IsCompleted;
                 MainMod.GetPlayerCharacter().GetModPlayer<PlayerMod>().TrackedQuest = SelectedQuest;
                 QuestStoryPage = 0;
                 return;
             }
+            IsCompletedQuest = false;
             SelectedQuest = -1;
             MainMod.GetPlayerCharacter().GetModPlayer<PlayerMod>().TrackedQuest = -1;
             QuestName = GetTranslation("NoQuestSelected");
