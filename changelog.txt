@@ -5,3 +5,6 @@ Made the mod no longer extract its source and resources.
 Moved WordWrap method from MainMod to InterfaceHelper.
 Fixed a crash this mod would cause on npcs dialogues, when there was a quest available.
 Made the Quest interface go back to first page when changing quests.
+Added a Mouse Over Tooltip helper.
+Added a method to InterfaceHelper which helps turning words into plural based on a count.
+Added a method to InterfaceHelper which helps getting bidimensional direction text (like if position two is to the right of position 1, will tell that target is east).

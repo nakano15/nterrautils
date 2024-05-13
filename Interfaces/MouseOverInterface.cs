@@ -20,6 +20,7 @@ namespace nterrautils
     public class MouseOverInterface : LegacyGameInterfaceLayer
     {
         static string MouseOverText = "";
+        public static Color MouseOverColor = Color.Blue * .9f;
 
         public MouseOverInterface() : base("N Terra Utils: Mouse Over", DrawInterface, InterfaceScaleType.UI)
         {
@@ -37,7 +38,7 @@ namespace nterrautils
                     Position.X = Main.screenWidth - Dimension.X - Padding * 2;
                 if (Position.Y + Dimension.Y + Padding * 2 > Main.screenHeight)
                     Position.Y = Main.screenHeight - Dimension.Y - Padding * 2;
-                InterfaceHelper.DrawBackgroundPanel(Position, (int)(Dimension.X + Padding * 2), (int)(Dimension.Y + Padding * 2), Color.Blue);
+                InterfaceHelper.DrawBackgroundPanel(Position, (int)(Dimension.X + Padding * 2), (int)(Dimension.Y + Padding * 2), MouseOverColor);
                 Position.X += Padding;
                 Position.Y += Padding;
                 Utils.DrawBorderString(Main.spriteBatch, MouseOverText, Position, Color.White);

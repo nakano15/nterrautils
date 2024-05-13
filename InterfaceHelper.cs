@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using ReLogic.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace nterrautils
@@ -184,5 +185,45 @@ namespace nterrautils
 				CurrentText.Add(LastLine);
 			return CurrentText.ToArray();
 		}
+
+		public static string PluralizeString(string Text, int Count)
+		{
+			if (System.Math.Abs(Count) <= 1 || Text.EndsWith('s')) return Text;
+			if(Text.EndsWith("fe"))
+				return Text.Substring(0, Text.Length - 2) + "ves";
+			if(Text.EndsWith("o"))
+				return Text + "es";
+			return Text + 's';
+		}
+
+		public static string GetDirectionText(Vector2 Position1, Vector2 Position2)
+        {
+            return GetDirectionText(Position2 - Position1);
+        }
+
+		public static string GetDirectionText(Vector2 Direction)
+        {
+            Direction.Normalize();
+            bool CountVerticalDiference = Math.Abs(Direction.Y) >= 0.33f, CountHorizontalDiference = Math.Abs(Direction.X) >= 0.33f;
+            string DirectionText = "";
+            if (CountVerticalDiference && CountHorizontalDiference)
+            {
+                if (Direction.Y > 0) DirectionText += "South";
+                else DirectionText += "North";
+                if (Direction.X > 0) DirectionText += "east";
+                else DirectionText += "west";
+            }
+            else if (CountVerticalDiference)
+            {
+                if (Direction.Y > 0) DirectionText = "South";
+                else DirectionText = "North";
+            }
+            else if (CountHorizontalDiference)
+            {
+                if (Direction.X > 0) DirectionText = "East";
+                else DirectionText = "West";
+            }
+            return DirectionText;
+        }
     }
 }
