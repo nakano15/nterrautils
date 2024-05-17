@@ -7,6 +7,9 @@ Some of the functions this mod offers is adding tabs to the bottom part of the s
 inventory is opened (which other mods can also use to add more tabs for their mods functions),
 and a quest system.
 
+It also adds some methods that might be handy for interface work, alongside mouse text.
+And a side bar interface helper too.
+
 You can find the discord of the mod bellow if you have questions:
 https://discord.gg/Bz6vwUa7X3
 

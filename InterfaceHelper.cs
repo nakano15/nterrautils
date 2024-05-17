@@ -23,7 +23,7 @@ namespace nterrautils
         public static void DrawBackgroundPanel(Vector2 Position, int Width, int Height, Color color)
         {
             int HalfHeight = (int)(Height * 0.5f);
-            Texture2D ChatBackground = TextureAssets.ChatBack.Value;
+            Texture2D ChatBackground = MainMod.InterfaceBackgroundTexture.Value;
             for(byte y = 0; y < 3; y++)
             {
                 for(byte x = 0; x < 3; x++)

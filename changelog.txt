@@ -8,3 +8,4 @@ Made the Quest interface go back to first page when changing quests.
 Added a Mouse Over Tooltip helper.
 Added a method to InterfaceHelper which helps turning words into plural based on a count.
 Added a method to InterfaceHelper which helps getting bidimensional direction text (like if position two is to the right of position 1, will tell that target is east).
+Changed the texture of the background panel to a grayish color one, to better support color changing.
