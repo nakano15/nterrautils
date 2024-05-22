@@ -1,11 +1,1 @@
-Added a vertical offset position changer for the side bar elements.
-Added InterfaceHelper class.
-Made the mod no longer extract its source and resources.
- => Beside, there is the Github page to get the source from, so doesn't make sense this.
-Moved WordWrap method from MainMod to InterfaceHelper.
-Fixed a crash this mod would cause on npcs dialogues, when there was a quest available.
-Made the Quest interface go back to first page when changing quests.
-Added a Mouse Over Tooltip helper.
-Added a method to InterfaceHelper which helps turning words into plural based on a count.
-Added a method to InterfaceHelper which helps getting bidimensional direction text (like if position two is to the right of position 1, will tell that target is east).
-Changed the texture of the background panel to a grayish color one, to better support color changing.
+Added a fail safe to avoid inventory layer interfaces from being prevented to be drawn when layer doesn't exist.
