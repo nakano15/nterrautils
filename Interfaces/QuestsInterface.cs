@@ -63,7 +63,7 @@ namespace nterrautils
             {
                 MainMod.GetPlayerCharacter().mouseInterface = true;
             }
-            Color InnerPannelColor = Color.Cyan;
+            Color InnerPannelColor = new Color(55, 55, 255);
             DrawBackgroundPanel(Position, Width, Height, Color.Blue);
             Vector2 InterfacePosition = Position;
             InterfacePosition += Vector2.One * 8f;

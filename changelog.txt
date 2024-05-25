@@ -1,1 +1,3 @@
-Added a fail safe to avoid inventory layer interfaces from being prevented to be drawn when layer doesn't exist.
+Added methods to help turning items to text glyphs for a number of interface uses.
+ => Found on InterfaceHelper class.
+

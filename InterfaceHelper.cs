@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.GameContent;
 using ReLogic.Graphics;
 using System;
@@ -225,5 +226,62 @@ namespace nterrautils
             }
             return DirectionText;
         }
+
+		public static string GlyphfyItem(Item item)
+		{
+			return GlyphfyItem(item.type, item.stack, item.prefix);
+		}
+
+		public static string GlyphfyItem(int ID, int Stack = 1, int Prefix = 0)
+		{
+			if (Prefix > 0)
+			{
+				return "[i/p"+Prefix+":"+ID+"]";
+			}
+			return "[i/s"+Stack+":"+ID+"]";
+		}
+
+		public static string GlyphfyCoins(int value)
+		{
+			int c = value, s = 0, g = 0, p = 0;
+			if (c >= 100)
+			{
+				s += c / 100;
+				c -= s * 100;
+			}
+			if (s >= 100)
+			{
+				g += s / 100;
+				s -= g * 100;
+			}
+			if (g >= 100)
+			{
+				p += g / 100;
+				g -= p * 100;
+			}
+			return GlyphfyCoins(c, s, g, p);
+		}
+
+		public static string GlyphfyCoins(int c, int s = 0, int g = 0, int p = 0)
+		{
+			string Text = "";
+			if (p > 0)
+			{
+				Text += "[i/s"+p+":"+ItemID.PlatinumCoin+"]";
+			}
+			if (g > 0)
+			{
+				Text += "[i/s"+g+":"+ItemID.GoldCoin+"]";
+			}
+			if (s > 0)
+			{
+				Text += "[i/s"+s+":"+ItemID.SilverCoin+"]";
+			}
+			if (c > 0)
+			{
+				Text += "[i/s"+c+":"+ItemID.CopperCoin+"]";
+			}
+			return Text;
+		}
     }
 }
