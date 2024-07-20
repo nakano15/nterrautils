@@ -85,7 +85,7 @@ namespace nterrautils.Interfaces
 						WidthStack += PaddingWidth * 2 + Font.MeasureString(Text).X + Rect.Width;
 					}
 				}
-				Vector2 ButtonStartPosition = new Vector2((Main.screenWidth - WidthStack) * .5f, Main.screenHeight - 48);
+				Vector2 ButtonStartPosition = new Vector2((Main.screenWidth - WidthStack) * .5f, Main.screenHeight - 32);
 				for (int i = 0; i < ButtonTexts.Count; i++)
 				{
 					if (!Buttons[i].Visible) continue;

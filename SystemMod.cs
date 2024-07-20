@@ -49,8 +49,8 @@ namespace nterrautils
                         {
                                 layers.Insert(MouseOver, MouseOverInterfaceDef);
                         }
-						if (InventoryPos == -1)
-							InventoryPos = 0;
+                        if (InventoryPos == -1)
+                                InventoryPos = 0;
                         //if (InventoryPos > -1)
                         {
                                 layers.Insert(InventoryPos, QuestInterfaceDef);
