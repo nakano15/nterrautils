@@ -11,5 +11,10 @@ namespace nterrautils.FilmPlayer
         {
 
         }
+
+        public void StopMovie()
+        {
+            UpgradedFilmPlayer.StopMovie();
+        }
     }
 }

@@ -36,6 +36,7 @@ namespace nterrautils
                 public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
                 {
                         int InventoryPos = -1, MouseOver = -1;
+                        bool HideInterfaceForMovie = FilmPlayer.UpgradedFilmPlayer.MovieHidesInterface;
                         for (int i = 0; i < layers.Count; i++)
                         {
                                 switch(layers[i].Name)
@@ -48,9 +49,16 @@ namespace nterrautils
                                                 break;
                                 }
                         }
+                        /*if (HideInterfaceForMovie)
+                        {
+                                layers.Insert(0, DrawMovieOnScreenInterfaceDef);
+                                return;
+                        }*/
                         if (MouseOver > -1)
                         {
                                 layers.Insert(MouseOver, MouseOverInterfaceDef);
+                                if (FilmPlayer.UpgradedFilmPlayer.DrawInFrontOfInterface)
+                                        layers.Add(DrawMovieOnScreenInterfaceDef);
                         }
                         if (InventoryPos == -1)
                                 InventoryPos = 0;
@@ -60,7 +68,13 @@ namespace nterrautils
                                 layers.Insert(InventoryPos, BottomInterfaceDef);
                                 layers.Insert(InventoryPos, LeftScreenInterfaceDef);
                         }
-                        layers.Add(DrawMovieOnScreenInterfaceDef);
+                        if (!FilmPlayer.UpgradedFilmPlayer.DrawInFrontOfInterface)
+                                layers.Add(DrawMovieOnScreenInterfaceDef);
+                }
+
+                public override void PostUpdateEverything()
+                {
+                        FilmPlayer.UpgradedFilmPlayer.Update(Main.gameTimeCache);
                 }
         }
 }

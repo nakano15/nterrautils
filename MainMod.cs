@@ -17,7 +17,6 @@ namespace nterrautils
 		internal static Mod GetMod => _Mod;
 		internal static string GetModName => _Mod.Name;
         internal const int SaveVersion = 1;
-		internal static UpgradedFilmPlayer MoviePlayer = null;
 
         public override void Load()
         {
@@ -45,7 +44,7 @@ namespace nterrautils
 			BottomButtonTexture = null;
 			QuestContainer.Unload();
 			ModCompatibility.TerraGuardiansMod.Unload();
-			MoviePlayer = null;
+			UpgradedFilmPlayer.Unload();
 			_Mod = null;
         }
 

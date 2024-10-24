@@ -5,6 +5,7 @@ using Terraria.UI.Chat;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using nterrautils.FilmPlayer;
 
 namespace nterrautils.Interface
 {
@@ -18,9 +19,9 @@ namespace nterrautils.Interface
 
         new public static bool Draw()
         {
-            if (MainMod.MoviePlayer.IsPlayingMovie)
+            if (UpgradedFilmPlayer.IsPlayingMovie)
             {
-                MainMod.MoviePlayer.Draw();
+                UpgradedFilmPlayer.Draw();
             }
             return true;
         }
