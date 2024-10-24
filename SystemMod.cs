@@ -12,6 +12,7 @@ namespace nterrautils
                 static QuestInterface QuestInterfaceDef;
                 static LeftScreenInterface LeftScreenInterfaceDef;
                 static MouseOverInterface MouseOverInterfaceDef;
+                static Interface.DrawMovieOnScreenInterface DrawMovieOnScreenInterfaceDef;
 
                 public override void Load()
                 {
@@ -19,6 +20,7 @@ namespace nterrautils
                         QuestInterfaceDef = new QuestInterface();
                         LeftScreenInterfaceDef = new LeftScreenInterface();
                         MouseOverInterfaceDef = new MouseOverInterface();
+                        DrawMovieOnScreenInterfaceDef = new Interface.DrawMovieOnScreenInterface();
                 }
 
                 public override void Unload()
@@ -28,6 +30,7 @@ namespace nterrautils
                         QuestInterfaceDef = null;
                         LeftScreenInterfaceDef = null;
                         MouseOverInterfaceDef = null;
+                        DrawMovieOnScreenInterfaceDef = null;
                 }
 
                 public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -57,6 +60,7 @@ namespace nterrautils
                                 layers.Insert(InventoryPos, BottomInterfaceDef);
                                 layers.Insert(InventoryPos, LeftScreenInterfaceDef);
                         }
+                        layers.Add(DrawMovieOnScreenInterfaceDef);
                 }
         }
 }

@@ -5,6 +5,7 @@ using ReLogic.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using nterrautils.FilmPlayer;
 
 namespace nterrautils
 {
@@ -16,6 +17,7 @@ namespace nterrautils
 		internal static Mod GetMod => _Mod;
 		internal static string GetModName => _Mod.Name;
         internal const int SaveVersion = 1;
+		internal static UpgradedFilmPlayer MoviePlayer = null;
 
         public override void Load()
         {
@@ -43,6 +45,7 @@ namespace nterrautils
 			BottomButtonTexture = null;
 			QuestContainer.Unload();
 			ModCompatibility.TerraGuardiansMod.Unload();
+			MoviePlayer = null;
 			_Mod = null;
         }
 
