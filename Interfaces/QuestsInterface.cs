@@ -38,9 +38,9 @@ namespace nterrautils
         const float QuestListIndexGap = 30, QuestStoryGap = 24;
         static string QuestName = "";
         static string[] SelectedQuestProgress = new string[0], SelectedQuestObjective = new string[0];
-        const string InterfaceKey = "Mods.terraguardians.Interface.QuestLog.";
+        const string InterfaceKey = "Mods.nterrautils.Interface.QuestLog.";
 
-        public QuestInterface() : base("TerraGuardians: Quest Interface", DrawInterface, InterfaceScaleType.UI)
+        public QuestInterface() : base("NTerraria Utilities: Quest Interface", DrawInterface, InterfaceScaleType.UI)
         {
             
         }

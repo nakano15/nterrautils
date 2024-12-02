@@ -1,4 +1,1 @@
-Added methods to help turning items to text glyphs for a number of interface uses.
- => Found on InterfaceHelper class.
-Pushed update again to see if steam updates it on clients.
-Moved UpgradedFilmPlayer from TerraGuardians mod to this one.
+The Quest Interface no longer takes localization text from TerraGuardians mod.
