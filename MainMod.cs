@@ -17,6 +17,8 @@ namespace nterrautils
 		internal static Mod GetMod => _Mod;
 		internal static string GetModName => _Mod.Name;
         internal const int SaveVersion = 1;
+		public const string QuestExpRewardHooksString = "addquestexpreward";
+		static List<Action<Player, int, float>> QuestExpRewardHooks = new List<Action<Player, int, float>>();
 
         public override void Load()
         {
@@ -45,6 +47,8 @@ namespace nterrautils
 			QuestContainer.Unload();
 			ModCompatibility.TerraGuardiansMod.Unload();
 			UpgradedFilmPlayer.Unload();
+			QuestExpRewardHooks.Clear();
+			QuestExpRewardHooks = null;
 			_Mod = null;
         }
 
@@ -52,5 +56,27 @@ namespace nterrautils
 		{
 			return ModCompatibility.TerraGuardiansMod.GetPlayerCharacter();
 		}
-	}
+
+        public override object Call(params object[] args)
+        {
+			if (args.Length > 0 && args[0] is string)
+			{
+				switch ((string)args[0])
+				{
+					case QuestExpRewardHooksString:
+						if (args[1] is Action<Player, int, float>)
+						{
+							QuestExpRewardHooks.Add((Action<Player, int, float>)args[1]);
+						}
+						break;
+				}
+			}
+            return base.Call(args);
+        }
+
+		public static void TriggerExpRewardHooks(Player player, int Level, float Percentage)
+		{
+
+		}
+    }
 }

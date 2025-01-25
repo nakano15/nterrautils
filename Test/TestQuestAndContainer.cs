@@ -63,8 +63,8 @@ namespace nterrautils
                 "The weirdo is no more, and I feel like I've beaten this game. Yay!");
             step.AddNewObjective(new HuntObjective(NPCID.Guide, 1));
             step.OnQuestStepEnd = PlayCreditsIfPossible;
-            AddItemReward(ItemID.RedPotion, 5);
-            CoinsReward += 5500;
+            step.AddItemReward(ItemID.RedPotion, 5);
+            step.CoinsReward = 5500;
         }
 
         void GetVoodooDoll(Player player, ModularQuestStepData StepData)

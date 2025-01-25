@@ -240,7 +240,7 @@ namespace nterrautils
                 }
                 Position.X += QuestListWidth * .5f;
                 Position.Y += 18;
-                Utils.DrawBorderString(Main.spriteBatch, Language.GetTextValue("Mods.terraguardians.Interface.Close"), Position, c, anchorx: 0.5f, anchory: 0.5f);
+                Utils.DrawBorderString(Main.spriteBatch, GetTranslation("Close"), Position, c, anchorx: 0.5f, anchory: 0.5f);
             }
         }
 

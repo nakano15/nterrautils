@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
+using nterrautils.QuestObjectives;
 
 namespace nterrautils
 {
@@ -10,8 +11,6 @@ namespace nterrautils
     {
         public override QuestData GetQuestData => new ModularQuestData();
         private List<ModularQuestStep> QuestSteps = new List<ModularQuestStep>();
-        public int CoinsReward = 0;
-        public List<Item> ItemRewards = new List<Item>();
         public virtual string StoryStartLore => "";
         public virtual string StoryEndLore => "";
 
@@ -31,14 +30,11 @@ namespace nterrautils
             return null;
         }
 
-        public void SetCoinReward(int Platinum = 0, int Gold = 0, int Silver = 0, int Copper = 0)
+        ModularQuestStep GetLatestStep()
         {
-            CoinsReward = Copper + Silver * 100 + Gold * 10000 + Platinum * 1000000;
-        }
-
-        public void AddItemReward(int ItemID, int Stack = 1, int Prefix = 0)
-        {
-            ItemRewards.Add(new Item(ItemID, Stack, Prefix));
+            if (QuestSteps.Count > 0)
+                return QuestSteps[QuestSteps.Count - 1];
+            return null;
         }
 
         public override string QuestStory(QuestData data)
@@ -61,6 +57,23 @@ namespace nterrautils
                     Text = "\n\n" + StoryEndLore;
                 }
                 Text += "\n\nTHE END";
+                Dictionary<int, int> ItemRewards = new Dictionary<int, int>();
+                int CoinsReward = 0;
+                foreach (ModularQuestStep s in QuestSteps)
+                {
+                    CoinsReward += s.CoinsReward;
+                    foreach (Item i in s.ItemRewards)
+                    {
+                        if (ItemRewards.ContainsKey(i.type))
+                        {
+                            ItemRewards[i.type] += i.stack;
+                        }
+                        else
+                        {
+                            ItemRewards.Add(i.type, i.stack);
+                        }
+                    }
+                }
                 if (CoinsReward > 0 || ItemRewards.Count > 0)
                     Text += "\n\nReceived as reward: ";
                 if (CoinsReward > 0)
@@ -96,10 +109,16 @@ namespace nterrautils
                     }
                     Text += " coins.";
                 }
-                foreach (Item i in ItemRewards)
+                Item item = new Item();
+                foreach (int type in ItemRewards.Keys)
                 {
-                    Text += "\n* " + i.HoverName;
+                    item.SetDefaults(type);
+                    item.Prefix(0);
+                    item.stack = ItemRewards[type];
+                    Text += "\n* " + item.HoverName;
                 }
+                item = null;
+                ItemRewards.Clear();
             }
             else
             {
@@ -176,20 +195,11 @@ namespace nterrautils
             Base.OnStepChange(player, Data);
             ModularQuestData data = qdata as ModularQuestData;
             QuestSteps[data.Step].OnQuestStepEnd(player, Data);
+            GetRewards(player, QuestSteps[data.Step].CoinsReward, QuestSteps[data.Step].ItemRewards);
             data.Step++;
             if (data.Step == QuestSteps.Count)
             {
                 data.ShowQuestCompletedNotification();
-                GetCoinReward(CoinsReward, out int p, out int g, out int s, out int c);
-                Vector2 SpawnPos = player.Center;
-                if (p > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.PlatinumCoin, p, noGrabDelay: true);
-                if (g > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.GoldCoin, g, noGrabDelay: true);
-                if (s > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.SilverCoin, s, noGrabDelay: true);
-                if (c > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.CopperCoin, c, noGrabDelay: true);
-                foreach (Item i in ItemRewards)
-                {
-                    Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, i.type, i.stack, true, i.prefix, true);
-                }
             }
             else
             {
@@ -197,12 +207,26 @@ namespace nterrautils
             }
         }
 
-        void GetCoinReward(int Value, out int p, out int g, out int s, out int c)
+        void GetRewards(Player player, int Coins, List<Item> Rewards)
+        {
+            GetCoinReward(Coins, out int p, out int g, out int s, out int c);
+            Vector2 SpawnPos = player.Center;
+            if (p > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.PlatinumCoin, p, noGrabDelay: true);
+            if (g > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.GoldCoin, g, noGrabDelay: true);
+            if (s > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.SilverCoin, s, noGrabDelay: true);
+            if (c > 0) Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, Terraria.ID.ItemID.CopperCoin, c, noGrabDelay: true);
+            foreach (Item i in Rewards)
+            {
+                Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, i.type, i.stack, true, i.prefix, true);
+            }
+        }
+
+        static void GetCoinReward(int Value, out int p, out int g, out int s, out int c)
         {
             p = 0;
             g = 0;
             s = 0;
-            c = CoinsReward;
+            c = Value;
             if (c >= 100)
             {
                 s += c / 100;
@@ -249,6 +273,60 @@ namespace nterrautils
             QuestSteps.Add(CustomStep);
         }
 
+        protected void AddHuntObjective(int MonsterID, int KillCount = 5, string MonsterName = "")
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new HuntObjective(MonsterID, KillCount, MonsterName));
+            }
+        }
+
+        protected void AddItemCollectionObjective(int ItemID, int Stack = 5, bool TakeItems = true)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new ItemCollectionObjective(ItemID, Stack, TakeItems));
+            }
+        }
+
+        protected void AddTalkObjective(int NpcID, string Message)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new TalkObjective(NpcID, Message));
+            }
+        }
+            
+        public void SetStepCoinReward(int Platinum = 0, int Gold = 0, int Silver = 0, int Copper = 0)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.CoinsReward = Copper + Silver * 100 + Gold * 10000 + Platinum * 1000000;
+            }
+        }
+
+        public void AddStepItemReward(int ItemID, int Stack = 1, int Prefix = 0)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.ItemRewards.Add(new Item(ItemID, Stack, Prefix));
+            }
+        }
+
+        public void SetStepExpReward(int Level, float Percentage)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.ExpReward = new ExpRewardValue(Level, Percentage);
+            }
+        }
+
         public class ModularQuestStep
         {
             public List<ObjectiveBase> Objectives = new List<ObjectiveBase>();
@@ -260,6 +338,24 @@ namespace nterrautils
             }
             public Action<Player, ModularQuestStepData> OnQuestStepStart = delegate(Player player, ModularQuestStepData Data){ };
             public Action<Player, ModularQuestStepData> OnQuestStepEnd = delegate(Player player, ModularQuestStepData Data){ };
+            public int CoinsReward = 0;
+            public List<Item> ItemRewards = new List<Item>();
+            public ExpRewardValue ExpReward = new ExpRewardValue();
+            
+            public void SetCoinReward(int Platinum = 0, int Gold = 0, int Silver = 0, int Copper = 0)
+            {
+                CoinsReward = Copper + Silver * 100 + Gold * 10000 + Platinum * 1000000;
+            }
+
+            public void AddItemReward(int ItemID, int Stack = 1, int Prefix = 0)
+            {
+                ItemRewards.Add(new Item(ItemID, Stack, Prefix));
+            }
+
+            public void SetExpReward(int Level, float Percentage)
+            {
+                ExpReward = new ExpRewardValue(Level, Percentage);
+            }
 
             public void ChangeStoryText(string BeforeCompletting, string AfterCompletting)
             {
