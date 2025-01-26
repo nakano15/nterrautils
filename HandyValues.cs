@@ -22,4 +22,12 @@ public class HandyValues
     {
         322, 323, 324
     };
+    public static readonly int[] DemonEyeNPCIDs = new int[]
+    {
+        2, 190, 191, 192, 193, 194, 317, 318
+    };
+    public static readonly int[] HalloweenDemonEyeNPCIDs = new int[]
+    {
+        317, 318
+    };
 }
