@@ -76,7 +76,7 @@ namespace nterrautils
 
 		public static void AddQuestRewardHook(Action<Player, int, float> hook)
 		{
-			QuestExpRewardHooks.Add((Action<Player, int, float>)hook);
+			QuestExpRewardHooks.Add(hook);
 		}
 
 		public static void TriggerExpRewardHooks(Player player, int Level, float Percentage)

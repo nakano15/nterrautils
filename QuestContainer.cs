@@ -81,5 +81,25 @@ namespace nterrautils
             QuestsContainer = null;
             InvalidQuest = null;
         }
+
+        public static bool HasQuestBeenStarted(uint ID, string ModID)
+        {
+            QuestData d = PlayerMod.GetPlayerQuestData(MainMod.GetPlayerCharacter(), ID, ModID);
+            if (d != null)
+            {
+                return d.IsActive;
+            }
+            return false;
+        }
+
+        public static bool HasQuestBeenCompleted(uint ID, string ModID)
+        {
+            QuestData d = PlayerMod.GetPlayerQuestData(MainMod.GetPlayerCharacter(), ID, ModID);
+            if (d != null)
+            {
+                return d.IsCompleted;
+            }
+            return false;
+        }
     }
 }

@@ -1,2 +1,7 @@
 The Quest Interface no longer takes localization text from TerraGuardians mod.
 Improved Modular Quest Base script, to make it a lot easier to work with.
+Entering the world will now automatically try tracking first quest active, if there's none selected.
+Added a hooks that allows modders to add methods delivering exp reward from quests to players.
+ => There are two ways of adding hook.
+ => => One is by making a mod call to this mod, with first argument as "addquestexpreward", and second argument, as a method that has the arguments "Player, int, float". Player argument is the player receiving exp, the int argument is the level of reference, the float is the exp percentage based on level (actual percentage, not decimal, like 40%).
+ => => The other is by calling "AddQuestRewardHook" method from MainMod, and supplying a method that has the arguments "Player, int, float". Check the line above for infos about the arguments.
