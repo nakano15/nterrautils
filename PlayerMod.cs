@@ -41,7 +41,7 @@ namespace nterrautils
 
         public override void OnEnterWorld()
         {
-            if (MainMod.GetPlayerCharacter() == Player && TrackedQuest == -1)
+            if (MainMod.GetPlayerCharacter() == Player && (TrackedQuest == -1 || QuestDatas[TrackedQuest].IsCompleted))
             {
                 TrackNewQuest();
             }
