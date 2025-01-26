@@ -39,6 +39,26 @@ namespace nterrautils
             QuestContainer.CreateQuestListToPlayer(this);
         }
 
+        public override void OnEnterWorld()
+        {
+            if (MainMod.GetPlayerCharacter() == Player && TrackedQuest == -1)
+            {
+                TrackNewQuest();
+            }
+        }
+
+        public void TrackNewQuest()
+        {
+            for (int i = 0; i < QuestDatas.Count; i++)
+            {
+                if (QuestDatas[i].IsActive)
+                {
+                    TrackedQuest = i;
+                    break;
+                }
+            }
+        }
+
         public override void PostUpdate()
         {
             foreach (QuestData q in QuestDatas)

@@ -48,7 +48,7 @@ namespace nterrautils
             string Text = "";
             if (StoryStartLore != "")
             {
-                Text = StoryStartLore + "\n\n";
+                Text = StoryStartLore;
             }
             for (int step = 0; step < d.Step; step++)
             {
@@ -61,7 +61,7 @@ namespace nterrautils
             {
                 if (StoryEndLore != "")
                 {
-                    Text = "\n\n" + StoryEndLore;
+                    Text += "\n\n" + StoryEndLore;
                 }
                 Text += "\n\nTHE END";
                 Dictionary<int, int> ItemRewards = new Dictionary<int, int>();
@@ -202,7 +202,7 @@ namespace nterrautils
             Base.OnStepChange(player, Data);
             ModularQuestData data = qdata as ModularQuestData;
             QuestSteps[data.Step].OnQuestStepEnd(player, Data);
-            GetRewards(player, QuestSteps[data.Step].CoinsReward, QuestSteps[data.Step].ItemRewards);
+            GetRewards(player, QuestSteps[data.Step].CoinsReward, QuestSteps[data.Step].ItemRewards, QuestSteps[data.Step].ExpReward);
             data.Step++;
             if (data.Step == QuestSteps.Count)
             {
@@ -214,7 +214,7 @@ namespace nterrautils
             }
         }
 
-        void GetRewards(Player player, int Coins, List<Item> Rewards)
+        void GetRewards(Player player, int Coins, List<Item> Rewards, ExpRewardValue ExpReward)
         {
             GetCoinReward(Coins, out int p, out int g, out int s, out int c);
             Vector2 SpawnPos = player.Center;
@@ -226,6 +226,7 @@ namespace nterrautils
             {
                 Item.NewItem(Item.GetSource_None(), SpawnPos, Vector2.Zero, i.type, i.stack, true, i.prefix, true);
             }
+            nterrautils.MainMod.TriggerExpRewardHooks(player, ExpReward.Level, ExpReward.Percentage);
         }
 
         static void GetCoinReward(int Value, out int p, out int g, out int s, out int c)
