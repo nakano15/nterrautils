@@ -290,6 +290,15 @@ namespace nterrautils
             }
         }
 
+        protected void AddHuntObjective(int[] MonsterIDs, int KillCount = 5, string MonsterName = "")
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new HuntObjective(MonsterIDs, KillCount, MonsterName));
+            }
+        }
+
         protected void AddItemCollectionObjective(int ItemID, int Stack = 5, bool TakeItems = true)
         {
             ModularQuestStep LatestStep = GetLatestStep();

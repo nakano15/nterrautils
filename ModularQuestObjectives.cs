@@ -8,14 +8,14 @@ namespace nterrautils.QuestObjectives
 {
     public class HuntObjective : ModularQuestBase.ObjectiveBase
     {
-        public int MonsterID = 0;
+        public List<int> MonsterIDs = new List<int>();
         public int KillCount = 5;
         public string MonsterName = "";
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new HuntObjectiveData();
 
         public HuntObjective(int MonsterID, int KillCount = 5, string MonsterName = "")
         {
-            this.MonsterID = MonsterID;
+            MonsterIDs.Add(MonsterID);
             this.KillCount = KillCount;
             if (this.MonsterName == "")
             {
@@ -29,10 +29,26 @@ namespace nterrautils.QuestObjectives
             }
         }
 
+        public HuntObjective(int[] MonsterIDs, int KillCount = 5, string MonsterName = "")
+        {
+            this.MonsterIDs.AddRange(MonsterIDs);
+            this.KillCount = KillCount;
+            if (this.MonsterName == "")
+            {
+                NPC n = new NPC();
+                n.SetDefaults(MonsterIDs[0]);
+                this.MonsterName = n.GivenOrTypeName;
+            }
+            else
+            {
+                this.MonsterName = MonsterName;
+            }
+        }
+
         public override void OnMobKill(NPC killedNpc, ModularQuestBase.ObjectiveData Data)
         {
             HuntObjectiveData d = Data as HuntObjectiveData;
-            if (killedNpc.type == MonsterID && d.Kills < KillCount)
+            if (MonsterIDs.Contains(killedNpc.type) && d.Kills < KillCount)
             {
                 d.Kills++;
                 if (d.Kills == KillCount)
