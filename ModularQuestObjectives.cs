@@ -232,4 +232,127 @@ namespace nterrautils.QuestObjectives
             }
         }
     }
+
+    public class NpcMoveInObjective : ModularQuestBase.ObjectiveBase
+    {
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new NpcMoveInData();
+        public int NpcID = 0;
+        public string NpcDefaultName = "";
+
+        public NpcMoveInObjective(int NpcID)
+        {
+            this.NpcID = NpcID;
+            NPC n = new NPC();
+            n.SetDefaults(NpcID);
+            NpcDefaultName = n.TypeName;
+            n = null;
+        }
+
+        public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
+        {
+            NpcMoveInData d = Data as NpcMoveInData;
+            string name = NPC.GetFirstNPCNameOrNull(NpcID);
+            if (name == null) name = NpcDefaultName;
+            if (!d.MovedIn)
+                return "Have " + name + " move in to a house.";
+            else
+                return name + " moved in to a house.";
+        }
+
+        public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
+        {
+            int index = NPC.FindFirstNPC(NpcID);
+            return index > -1 && !Main.npc[index].homeless;
+        }
+
+        public class NpcMoveInData : ModularQuestBase.ObjectiveData
+        {
+            public bool MovedIn = false;
+            const ushort Version = 0;
+
+            public override void Save(TagCompound save, string QuestID)
+            {
+                save.Add("Version" + QuestID, Version);
+                save.Add("MovedIn" + QuestID, MovedIn);
+            }
+
+            public override void Load(TagCompound load, string QuestID, ushort LastVersion)
+            {
+                int Version = load.Get<ushort>("Version" + QuestID);
+                MovedIn = load.GetBool("MovedIn" + QuestID);
+            }
+        }
+    }
+
+    public class ObjectCollectionObjective : ModularQuestBase.ObjectiveBase
+    {
+        public int Stack = 5;
+        public string ObjectName = "";
+        public float DropRate = 100f;
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new ObjectCollectionData();
+        public bool TakeItems = true;
+        public List<int> NpcIDs = new List<int>();
+        public string NpcName = "";
+
+        public ObjectCollectionObjective(string ObjectName, int NpcID, float DropRate = 50f, int Stack = 5, string CustomName = null)
+        {
+            this.ObjectName = ObjectName;
+            this.Stack = Stack;
+            this.DropRate = DropRate;
+            NpcIDs.Add(NpcID);
+            if (CustomName != null)
+                NpcName = CustomName;
+            else
+            {
+                NPC n = new NPC();
+                n.SetDefaults(NpcID);
+                NpcName = n.GivenOrTypeName;
+                n = null;
+            }
+        }
+
+        public ObjectCollectionObjective(string ObjectName, int[] NpcIDs, string NpcGroupName, float DropRate = 50f, int Stack = 5)
+        {
+            this.ObjectName = ObjectName;
+            this.Stack = Stack;
+            this.DropRate = DropRate;
+            this.NpcIDs.AddRange(NpcIDs);
+            NpcName = NpcGroupName;
+        }
+
+        public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
+        {
+            ObjectCollectionData data = Data as ObjectCollectionData;
+            if (data.ItemsContained < Stack)
+            {
+                int Count = Stack - data.ItemsContained;
+                return "Collect " + Count + " " + ObjectName + " from "+NpcName+"("+DropRate+"%).";
+            }
+            else
+            {
+                return "Collected " + Stack + " " + ObjectName + ".";
+            }
+        }
+
+        public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
+        {
+            ObjectCollectionData data = Data as ObjectCollectionData;
+            return data.ItemsContained >= Stack;
+        }
+
+        public override void OnMobKill(NPC killedNpc, ModularQuestBase.ObjectiveData data)
+        {
+            if (NpcIDs.Contains(killedNpc.type) && Main.rand.NextFloat(0f, 100f) < DropRate)
+            {
+                CombatText.NewText(killedNpc.getRect(), Color.Gray, "Found a " + ObjectName + "!", true);
+                (data as ObjectCollectionData).ItemsContained++;
+            }
+        }
+
+        public class ObjectCollectionData : ModularQuestBase.ObjectiveData
+        {
+            public int ItemsContained = 0;
+        }
+    }
+    
 }

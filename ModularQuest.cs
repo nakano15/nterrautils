@@ -30,11 +30,16 @@ namespace nterrautils
             return null;
         }
 
-        ModularQuestStep GetLatestStep()
+        ModularQuestStep GetLatestStep(bool CreateLastStepIfDoesntExist = true)
         {
-            if (QuestSteps.Count > 0)
-                return QuestSteps[QuestSteps.Count - 1];
-            return null;
+            if (QuestSteps.Count == 0)
+            {
+                if (CreateLastStepIfDoesntExist)
+                    AddNewQuestStep();
+                else
+                    return null;
+            }
+            return QuestSteps[QuestSteps.Count - 1];
         }
 
         public override string QuestStory(QuestData data)
@@ -47,8 +52,10 @@ namespace nterrautils
             }
             for (int step = 0; step < d.Step; step++)
             {
+                string StepText = QuestSteps[step].GetStepStoryText(d.Step > step);
+                if (StepText.Length == 0) continue;
                 if (Text.Length > 0) Text += "\n\n";
-                Text += QuestSteps[step].GetStepStoryText(true);
+                Text += StepText;
             }
             if (d.Step >= QuestSteps.Count)
             {
@@ -299,7 +306,34 @@ namespace nterrautils
                 LatestStep.AddNewObjective(new TalkObjective(NpcID, Message));
             }
         }
-            
+
+        protected void AddNpcMoveInObjective(int NpcID)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new NpcMoveInObjective(NpcID));
+            }
+        }
+
+        protected void AddObjectCollectionObjective(string ObjectName, int NpcID, float DropRate = 50f, int Stack = 5, string CustomName = null)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new ObjectCollectionObjective(ObjectName, NpcID, DropRate, Stack, CustomName));
+            }
+        }
+
+        protected void AddObjectCollectionObjective(string ObjectName, int[] NpcIDs, string NpcGroupName, float DropRate = 50f, int Stack = 5)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new ObjectCollectionObjective(ObjectName, NpcIDs, NpcGroupName, DropRate, Stack));
+            }
+        }
+        
         public void SetStepCoinReward(int Platinum = 0, int Gold = 0, int Silver = 0, int Copper = 0)
         {
             ModularQuestStep LatestStep = GetLatestStep();
@@ -324,6 +358,15 @@ namespace nterrautils
             if (LatestStep != null)
             {
                 LatestStep.ExpReward = new ExpRewardValue(Level, Percentage);
+            }
+        }
+
+        public void SetQuestStepStoryText(string BeforeCompletion, string AfterCompletion)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.ChangeStoryText(BeforeCompletion, AfterCompletion);
             }
         }
 
@@ -462,7 +505,6 @@ namespace nterrautils
                 }
             }
 
-            
             protected override void Save(TagCompound save, string QuestID)
             {
                 for (int d = 0; d < StepDatas.Length; d++)

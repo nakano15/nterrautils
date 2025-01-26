@@ -74,9 +74,17 @@ namespace nterrautils
             return base.Call(args);
         }
 
+		public static void AddQuestRewardHook(Action<Player, int, float> hook)
+		{
+			QuestExpRewardHooks.Add((Action<Player, int, float>)hook);
+		}
+
 		public static void TriggerExpRewardHooks(Player player, int Level, float Percentage)
 		{
-
+			foreach (Action<Player, int, float> hook in QuestExpRewardHooks)
+			{
+				hook(player, Level, Percentage);
+			}
 		}
     }
 }

@@ -1,1 +1,2 @@
 The Quest Interface no longer takes localization text from TerraGuardians mod.
+Improved Modular Quest Base script, to make it a lot easier to work with.
