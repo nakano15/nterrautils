@@ -30,7 +30,7 @@ namespace nterrautils
             return null;
         }
 
-        ModularQuestStep GetLatestStep(bool CreateLastStepIfDoesntExist = true)
+        protected ModularQuestStep GetLatestStep(bool CreateLastStepIfDoesntExist = true)
         {
             if (QuestSteps.Count == 0)
             {
@@ -376,6 +376,15 @@ namespace nterrautils
             if (LatestStep != null)
             {
                 LatestStep.AddNewObjective(new MaxManaObjective(MaxMana));
+            }
+        }
+
+        protected void AddDefenseIncreaseObjective(int Defense)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new DefenseIncreaseObjective(Defense));
             }
         }
         

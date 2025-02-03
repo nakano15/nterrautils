@@ -36,6 +36,8 @@ Quest: {
 		GotMaxHealth: Reached {value} Maximun Health or Higher.
 		GetMaxMana: Get {value} Extra Maximun Mana or Higher.
 		GotMaxMana: Reached {value} Maximun Mana or Higher.
+		GetDefense: Get at least {value} defense.
+		GotDefense: Got at least {value} defense.
 	}
 
 	TheEnd: THE END

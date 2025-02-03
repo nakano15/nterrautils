@@ -462,6 +462,39 @@ namespace nterrautils.QuestObjectives
         }
     }
 
+    public class DefenseIncreaseObjective : ModularQuestBase.ObjectiveBase
+    {
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new ModularQuestBase.ObjectiveData();
+        public int DefenseToGet = 0;
+        
+        public DefenseIncreaseObjective(int DefenseToGet)
+        {
+            this.DefenseToGet = DefenseToGet;
+        }
+
+        public override void UpdatePlayer(Player player, ModularQuestBase.ObjectiveData data)
+        {
+            (data as DefenseIncreaseObjectiveData).DefenseValue = player.statDefense;
+        }
+
+        public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
+        {
+            if ((Data as DefenseIncreaseObjectiveData).DefenseValue >= DefenseToGet)
+                return GetTranslation("GotDefense").Replace("{value}", DefenseToGet.ToString());
+            return GetTranslation("GetDefense").Replace("{value}", DefenseToGet.ToString());
+        }
+
+        public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
+        {
+            return (Data as DefenseIncreaseObjectiveData).DefenseValue >= DefenseToGet;
+        }
+
+        public class DefenseIncreaseObjectiveData : ModularQuestBase.ObjectiveData
+        {
+            public int DefenseValue = 0;
+        }
+    }
+
     public class MaxStatObjectiveData : ModularQuestBase.ObjectiveData
     {
         public bool Achieved = false;
