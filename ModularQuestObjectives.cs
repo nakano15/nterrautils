@@ -53,7 +53,7 @@ namespace nterrautils.QuestObjectives
                 d.Kills++;
                 if (d.Kills == KillCount)
                 {
-                    Main.NewText("Killed all the " + MonsterName + " necessary.");
+                    Main.NewText(GetTranslation("AllMobsKilledNotice").Replace("{name}", MonsterName));
                 }
             }
         }
@@ -70,11 +70,11 @@ namespace nterrautils.QuestObjectives
             if (d.Kills < KillCount)
             {
                 int Count = KillCount - d.Kills;
-                return "Kill " + Count + " " + MonsterName + ".";
+                return GetTranslation("KillMobCount").Replace("{count}", Count.ToString()).Replace("{name}", MonsterName);
             }
             else
             {
-                return "Killed all the " + KillCount + " " + MonsterName + ".";
+                return GetTranslation("KilledMobCount").Replace("{count}", KillCount.ToString()).Replace("{name}", MonsterName);
             }
         }
 
@@ -119,11 +119,11 @@ namespace nterrautils.QuestObjectives
             if (data.ItemsContained < Stack)
             {
                 int Count = Stack - data.ItemsContained;
-                return "Collect " + Count + " " + ItemName + ".";
+                return GetTranslation("CollectItemCount").Replace("{count}", Count.ToString()).Replace("{name}", ItemName);
             }
             else
             {
-                return "Collected " + Stack + " " + ItemName + ".";
+                return GetTranslation("CollectedItemCount").Replace("{count}", Stack.ToString()).Replace("{name}", ItemName);
             }
         }
 
@@ -201,11 +201,11 @@ namespace nterrautils.QuestObjectives
             }
             if (!d.TalkedTo)
             {
-                return "Speak with " + name + ".";
+                return GetTranslation("TalkTo").Replace("{name}", name);
             }
             else
             {
-                return "Has spoken with " + name + ".";
+                return GetTranslation("TalkedTo").Replace("{name}", name);
             }
         }
 
@@ -270,9 +270,9 @@ namespace nterrautils.QuestObjectives
             string name = NPC.GetFirstNPCNameOrNull(NpcID);
             if (name == null) name = NpcDefaultName;
             if (!d.MovedIn)
-                return "Have " + name + " move in to a house.";
+                return GetTranslation("MoveIn").Replace("{name}", name);
             else
-                return name + " moved in to a house.";
+                return GetTranslation("MovedIn").Replace("{name}", name);
         }
 
         public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
@@ -342,11 +342,13 @@ namespace nterrautils.QuestObjectives
             if (data.ItemsContained < Stack)
             {
                 int Count = Stack - data.ItemsContained;
-                return "Collect " + Count + " " + ObjectName + " from "+NpcName+"("+DropRate+"%).";
+                return GetTranslation("CollectObjectCount").Replace("{count}", Count.ToString())
+                    .Replace("{name}", ObjectName).Replace("{npcs}", NpcName)
+                    .Replace("{droprate}", DropRate.ToString());
             }
             else
             {
-                return "Collected " + Stack + " " + ObjectName + ".";
+                return GetTranslation("CollectedObjectCount").Replace("{name}", ObjectName).Replace("{count}", Stack.ToString());
             }
         }
 
@@ -358,17 +360,102 @@ namespace nterrautils.QuestObjectives
 
         public override void OnMobKill(NPC killedNpc, ModularQuestBase.ObjectiveData data)
         {
-            if (NpcIDs.Contains(killedNpc.type) && Main.rand.NextFloat(0f, 100f) < DropRate)
+            int Type = killedNpc.type;
+            if (killedNpc.realLife != -1)
             {
-                CombatText.NewText(killedNpc.getRect(), Color.Gray, "Found a " + ObjectName + "!", true);
+                Type = Main.npc[killedNpc.realLife].type;
+            }
+            if (NpcIDs.Contains(Type) && Main.rand.NextFloat(0f, 100f) < DropRate)
+            {
+                CombatText.NewText(killedNpc.getRect(), Color.Gray, GetTranslation("FoundObject").Replace("{name}", ObjectName), true);
                 (data as ObjectCollectionData).ItemsContained++;
             }
         }
 
         public class ObjectCollectionData : ModularQuestBase.ObjectiveData
         {
+            const byte SaveVersion = 0;
             public int ItemsContained = 0;
+
+            public override void Save(TagCompound save, string QuestID)
+            {
+                save.Add(QuestID + "_SaveVer", SaveVersion);
+                save.Add(QuestID + "_ItemCount", ItemsContained);
+            }
+
+            public override void Load(TagCompound load, string QuestID, ushort LastVersion)
+            {
+                byte Ver = load.GetByte(QuestID + "_SaveVer");
+                ItemsContained = load.GetInt(QuestID + "_ItemCount");
+            }
         }
     }
     
+    public class MaxHealthObjective : ModularQuestBase.ObjectiveBase
+    {
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new MaxStatObjectiveData();
+        public int MaxHealthValue = 100;
+
+        public MaxHealthObjective(int MaxHealthValue)
+        {
+            this.MaxHealthValue = MaxHealthValue;
+        }
+
+        public override void UpdatePlayer(Player player, ModularQuestBase.ObjectiveData data)
+        {
+            MaxStatObjectiveData Data = data as MaxStatObjectiveData;
+            Data.PreviousValue = player.statLifeMax;
+            Data.Achieved = player.statLifeMax >= MaxHealthValue;
+        }
+
+        public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
+        {
+            return (Data as MaxStatObjectiveData).Achieved;
+        }
+
+        public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
+        {
+            if ((Data as MaxStatObjectiveData).Achieved)
+                return GetTranslation("GotMaxHealth").Replace("{value}", MaxHealthValue.ToString());
+            int CurrentDiference = MaxHealthValue - (Data as MaxStatObjectiveData).PreviousValue;
+            return GetTranslation("GetMaxHealth").Replace("{value}", CurrentDiference.ToString());
+        }
+    }
+    
+    public class MaxManaObjective : ModularQuestBase.ObjectiveBase
+    {
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new MaxStatObjectiveData();
+        public int MaxManaValue = 100;
+
+        public MaxManaObjective(int MaxManaValue)
+        {
+            this.MaxManaValue = MaxManaValue;
+        }
+
+        public override void UpdatePlayer(Player player, ModularQuestBase.ObjectiveData data)
+        {
+            MaxStatObjectiveData Data = data as MaxStatObjectiveData;
+            Data.PreviousValue = player.statManaMax;
+            Data.Achieved = player.statManaMax >= MaxManaValue;
+        }
+
+        public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
+        {
+            return (Data as MaxStatObjectiveData).Achieved;
+        }
+
+        public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
+        {
+            if ((Data as MaxStatObjectiveData).Achieved)
+                return GetTranslation("GotMaxHealth").Replace("{value}", MaxManaValue.ToString());
+            int CurrentDiference = MaxManaValue - (Data as MaxStatObjectiveData).PreviousValue;
+            return GetTranslation("GetMaxHealth").Replace("{value}", CurrentDiference.ToString());
+        }
+    }
+
+    public class MaxStatObjectiveData : ModularQuestBase.ObjectiveData
+    {
+        public bool Achieved = false;
+        public int PreviousValue = 0;
+    }
 }

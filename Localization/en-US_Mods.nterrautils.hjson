@@ -18,6 +18,37 @@ Interface: {
 	}
 }
 
+Quests: {
+	Objective: {
+		AllMobsKilledNotice: Killed all the {name} necessary.
+		KillMobCount: Kill {count} {name}.
+		KilledMobCount: Killed all the {count} {name}.
+		CollectItemCount: Collect {count} {name}.
+		CollectedItemCount: Collected {count} {name}.
+		TalkTo: Speak with {name}.
+		TalkedTo: Has spoken with {name}.
+		MoveIn: Have {name} move in to a house.
+		MovedIn: "{name} moved in to a house."
+		CollectObjectCount: Collect {count} {name} from {npcs}({droprate}%).
+		CollectedObjectCount: Collected {stack} {name}.
+		FoundObject: Found a {name}!
+		GetMaxHealth: Get {value} Extra Maximun Health or Higher.
+		GotMaxHealth: Reached {value} Maximun Health or Higher.
+		GetMaxMana: Get {value} Extra Maximun Mana or Higher.
+		GotMaxMana: Reached {value} Maximun Mana or Higher.
+	}
+
+	TheEnd: THE END
+	ReceiveReward: "Receive as reward: "
+	Platinum: "{count} Platinum"
+	Gold: "{count} Gold"
+	Silver: "{count} Silver"
+	Copper: "{count} Copper"
+	Coins: *{coins} coins.
+	Item: * {item}
+	ObjectiveLine: * {objective}
+}
+
 Configs: {
 	ConfigMod: {
 		DisplayName: Config Mod

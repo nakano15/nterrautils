@@ -63,7 +63,7 @@ namespace nterrautils
                 {
                     Text += "\n\n" + StoryEndLore;
                 }
-                Text += "\n\nTHE END";
+                Text += "\n\n" + GetTranslation("TheEnd");
                 Dictionary<int, int> ItemRewards = new Dictionary<int, int>();
                 int CoinsReward = 0;
                 foreach (ModularQuestStep s in QuestSteps)
@@ -82,39 +82,41 @@ namespace nterrautils
                     }
                 }
                 if (CoinsReward > 0 || ItemRewards.Count > 0)
-                    Text += "\n\nReceived as reward: ";
+                    Text += "\n\n" + GetTranslation("ReceiveReward");
                 if (CoinsReward > 0)
                 {
                     GetCoinReward(CoinsReward, out int p, out int g, out int s, out int c);
-                    Text += "\n* ";
+                    Text += "\n";
+                    string CoinsString = "";
                     bool First = true;
                     if (p > 0)
                     {
-                        Text += p + " Platinum";
+                        CoinsString += GetTranslation("Platinum").Replace("{count}", p.ToString());
                         First = false;
                     }
                     if (g > 0)
                     {
                         if (!First)
-                            Text += ", ";
-                        Text += g + " Gold";
+                            CoinsString += ", ";
+                        CoinsString += GetTranslation("Gold").Replace("{count}", g.ToString());
                         First = false;
                     }
                     if (s > 0)
                     {
                         if (!First)
-                            Text += ", ";
-                        Text += s + " Silver";
+                            CoinsString += ", ";
+                        CoinsString += GetTranslation("Silver").Replace("{count}", s.ToString());
                         First = false;
                     }
                     if (c > 0)
                     {
                         if (!First)
-                            Text += ", ";
-                        Text += c + " Copper";
+                            CoinsString += ", ";
+                        CoinsString += GetTranslation("Copper").Replace("{count}", c.ToString());
                         First = false;
                     }
-                    Text += " coins.";
+                    Text += GetTranslation("coins").Replace("{coins}", CoinsString);
+
                 }
                 Item item = new Item();
                 foreach (int type in ItemRewards.Keys)
@@ -122,7 +124,7 @@ namespace nterrautils
                     item.SetDefaults(type);
                     item.Prefix(0);
                     item.stack = ItemRewards[type];
-                    Text += "\n* " + item.HoverName;
+                    Text += "\n" + GetTranslation("Item").Replace("{item}", item.HoverName);
                 }
                 item = null;
                 ItemRewards.Clear();
@@ -134,10 +136,16 @@ namespace nterrautils
                 Text += "\n";
                 for(int i = 0; i < QuestSteps[d.Step].Objectives.Count; i++)
                 {
-                    Text += "\n* " + QuestSteps[d.Step].Objectives[i].ObjectiveText(d.StepDatas[d.Step].ObjectiveDatas[i]);
+                    Text += "\n" + GetTranslation("ObjectiveLine").Replace("{objective}", QuestSteps[d.Step].Objectives[i].ObjectiveText(d.StepDatas[d.Step].ObjectiveDatas[i]));
                 }
             }
             return Text;
+        }
+        
+        public string GetTranslation(string Key, string ModID = "")
+        {
+            if (ModID == "") ModID = "nterrautils";
+            return "Mods." + ModID + ".Quest."+Key;
         }
 
         public override string GetQuestCurrentObjective(QuestData data)
@@ -341,6 +349,24 @@ namespace nterrautils
             if (LatestStep != null)
             {
                 LatestStep.AddNewObjective(new ObjectCollectionObjective(ObjectName, NpcIDs, NpcGroupName, DropRate, Stack));
+            }
+        }
+
+        protected void AddMaxHealthObjective(int MaxHealth)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new MaxHealthObjective(MaxHealth));
+            }
+        }
+
+        protected void AddMaxManaObjective(int MaxMana)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new MaxManaObjective(MaxMana));
             }
         }
         
@@ -554,6 +580,12 @@ namespace nterrautils
         public class ObjectiveBase
         {
             public virtual ObjectiveData GetObjectiveData => new ObjectiveData();
+
+            public string GetTranslation(string Key, string ModID = "")
+            {
+                if (ModID == "") ModID = "nterrautils";
+                return "Mods." + ModID + ".Quest.Objective."+Key;
+            }
             
             public virtual bool IsCompleted(ObjectiveData Data)
             {
