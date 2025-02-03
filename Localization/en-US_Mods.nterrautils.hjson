@@ -18,7 +18,7 @@ Interface: {
 	}
 }
 
-Quests: {
+Quest: {
 	Objective: {
 		AllMobsKilledNotice: Killed all the {name} necessary.
 		KillMobCount: Kill {count} {name}.

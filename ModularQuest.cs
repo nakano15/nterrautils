@@ -145,7 +145,7 @@ namespace nterrautils
         public string GetTranslation(string Key, string ModID = "")
         {
             if (ModID == "") ModID = "nterrautils";
-            return "Mods." + ModID + ".Quest."+Key;
+            return Terraria.Localization.Language.GetTextValue("Mods." + ModID + ".Quest."+Key);
         }
 
         public override string GetQuestCurrentObjective(QuestData data)
@@ -584,7 +584,7 @@ namespace nterrautils
             public string GetTranslation(string Key, string ModID = "")
             {
                 if (ModID == "") ModID = "nterrautils";
-                return "Mods." + ModID + ".Quest.Objective."+Key;
+                return Terraria.Localization.Language.GetTextValue("Mods." + ModID + ".Quest.Objective."+Key);
             }
             
             public virtual bool IsCompleted(ObjectiveData Data)
