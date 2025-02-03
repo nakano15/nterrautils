@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
+using System.Linq;
 
 namespace nterrautils.QuestObjectives
 {
@@ -99,7 +100,7 @@ namespace nterrautils.QuestObjectives
 
     public class ItemCollectionObjective : ModularQuestBase.ObjectiveBase
     {
-        public int ItemID = 0;
+        public int[] ItemID = new int[]{0};
         public int Stack = 5;
         public string ItemName = "";
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new ItemCollectionData();
@@ -107,9 +108,17 @@ namespace nterrautils.QuestObjectives
 
         public ItemCollectionObjective(int ItemID, int Stack = 5, bool TakeItems = true)
         {
-            this.ItemID = ItemID;
+            this.ItemID = new int[]{ItemID};
             this.Stack = Stack;
             ItemName = new Item(ItemID).Name;
+            this.TakeItems = TakeItems;
+        }
+
+        public ItemCollectionObjective(int[] ItemIDs, string ItemNames, int Stack = 5, bool TakeItems = true)
+        {
+            this.ItemID = ItemIDs;
+            this.Stack = Stack;
+            ItemName = ItemNames;
             this.TakeItems = TakeItems;
         }
 
@@ -139,7 +148,7 @@ namespace nterrautils.QuestObjectives
             int s = 0;
             for (int i = 0; i < 50; i++)
             {
-                if (player.inventory[i].type == ItemID)
+                if (ItemID.Contains(player.inventory[i].type))
                 {
                     s += player.inventory[i].stack;
                 }
@@ -153,7 +162,7 @@ namespace nterrautils.QuestObjectives
             int ToRemove = Stack;
             for (int i = 49; i >= 0; i--)
             {
-                if (player.inventory[i].type == ItemID)
+                if (ItemID.Contains(player.inventory[i].type))
                 {
                     int ToRemoveStack = player.inventory[i].stack;
                     if (ToRemoveStack > ToRemove)

@@ -316,6 +316,15 @@ namespace nterrautils
             }
         }
 
+        protected void AddItemCollectionObjective(int[] ItemIDs, string ItemName, int Stack = 5, bool TakeItems = true)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                LatestStep.AddNewObjective(new ItemCollectionObjective(ItemIDs, ItemName, Stack, TakeItems));
+            }
+        }
+
         protected void AddTalkObjective(int NpcID, string Message)
         {
             ModularQuestStep LatestStep = GetLatestStep();
