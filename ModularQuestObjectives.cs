@@ -464,7 +464,7 @@ namespace nterrautils.QuestObjectives
 
     public class DefenseIncreaseObjective : ModularQuestBase.ObjectiveBase
     {
-        public override ModularQuestBase.ObjectiveData GetObjectiveData => new ModularQuestBase.ObjectiveData();
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new DefenseIncreaseObjectiveData();
         public int DefenseToGet = 0;
         
         public DefenseIncreaseObjective(int DefenseToGet)

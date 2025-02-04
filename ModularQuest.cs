@@ -115,7 +115,7 @@ namespace nterrautils
                         CoinsString += GetTranslation("Copper").Replace("{count}", c.ToString());
                         First = false;
                     }
-                    Text += GetTranslation("coins").Replace("{coins}", CoinsString);
+                    Text += GetTranslation("Coins").Replace("{coins}", CoinsString);
 
                 }
                 Item item = new Item();

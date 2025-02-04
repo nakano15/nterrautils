@@ -51,7 +51,7 @@ namespace nterrautils
         {
             for (int i = 0; i < QuestDatas.Count; i++)
             {
-                if (QuestDatas[i].IsActive)
+                if (QuestDatas[i].IsActive && !QuestDatas[i].IsCompleted)
                 {
                     TrackedQuest = i;
                     break;
