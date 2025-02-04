@@ -17,6 +17,11 @@ And you can also join the Steam Group chat, if you want to find updates on your 
 when I launch an update, or to join the group chat:
 https://steamcommunity.com/groups/Nakano15-Modding
 
+If you're looking for a service to host your Terraria playthrough with friends, then know that you 
+can get 25% off your first month from renting a server from BisectHosting.
+Just use the code "nakano15" on the link bellow upon renting a server.
+https://bisecthosting.com/nakano15
+
 If you are curious about how the mod works, or want to use its functions, you can check its github.
 You can use tModLoader to extract the mod dll to use it for script references (on the mods list, 
 click the question mark, then ask it to extract).
