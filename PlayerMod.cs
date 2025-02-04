@@ -65,6 +65,7 @@ namespace nterrautils
             {
                 q.Base.UpdatePlayer(Player, q);
             }
+            NpcMod.UpdateCheckQuestText(Player);
         }
 
         public override void SaveData(TagCompound tag)

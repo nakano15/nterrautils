@@ -81,6 +81,7 @@ namespace nterrautils
 
 		public static void TriggerExpRewardHooks(Player player, int Level, float Percentage)
 		{
+			if (Level <= 0) return;
 			foreach (Action<Player, int, float> hook in QuestExpRewardHooks)
 			{
 				hook(player, Level, Percentage);

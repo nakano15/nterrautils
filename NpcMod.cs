@@ -9,6 +9,7 @@ namespace nterrautils
 {
     public class NpcMod : GlobalNPC
     {
+        internal static string LatestQuestText = "";
         protected override bool CloneNewInstances => false;
         //public override bool InstancePerEntity => true;
         
@@ -29,8 +30,27 @@ namespace nterrautils
             {
                 string s = q.Base.QuestNpcDialogue(npc, q, out bool BlockOtherMessages);
                 if (s != "" && s != null) chat = s;
+                LatestQuestText = s;
                 if (BlockOtherMessages)
                     break;
+            }
+        }
+
+        internal static void UpdateCheckQuestText(Player player)
+        {
+            if (LatestQuestText != "")
+            {
+                if (player.talkNPC == -1)
+                {
+                    LatestQuestText = "";
+                }
+                else
+                {
+                    if (Main.npcChatText != LatestQuestText)
+                    {
+                        Main.npcChatText = LatestQuestText;
+                    }
+                }
             }
         }
     }

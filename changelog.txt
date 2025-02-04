@@ -1,1 +1,2 @@
-Just added BisectHosting partnership information.
+Added a fail safe to avoid dialogues from being overriden by other mods.
+You will no longer get exp from 0 exp giving quest steps.
