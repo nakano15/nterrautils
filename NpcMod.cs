@@ -29,8 +29,11 @@ namespace nterrautils
             foreach (QuestData q in PlayerMod.GetPlayerQuests(MainMod.GetPlayerCharacter()))
             {
                 string s = q.Base.QuestNpcDialogue(npc, q, out bool BlockOtherMessages);
-                if (s != "" && s != null) chat = s;
-                LatestQuestText = s;
+                if (s != "" && s != null)
+                {
+                    chat = s;
+                    LatestQuestText = s;
+                }
                 if (BlockOtherMessages)
                     break;
             }
