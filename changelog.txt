@@ -1,1 +1,1 @@
-Fixed an issue where returned null quest string could prevent the player from reading npcs dialogues.
+Fixed a bug where certain quest objective progress wasn't being correctly loaded.

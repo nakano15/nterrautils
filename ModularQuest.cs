@@ -588,7 +588,7 @@ namespace nterrautils
                         ObjectiveData obdata = data.ObjectiveDatas[o];
                         string QuestObjectiveID = StepQuestID + "_o" + o;
                         string ObjectName = load.GetString("ObjectiveType" + QuestObjectiveID);
-                        if (ObjectName != obdata.GetType().Name)
+                        if (ObjectName == obdata.GetType().Name)
                             obdata.Load(load, QuestObjectiveID, LastVersion);
                     }
                 }
