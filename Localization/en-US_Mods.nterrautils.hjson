@@ -38,6 +38,10 @@ Quest: {
 		GotMaxMana: Reached {value} Maximun Mana or Higher.
 		GetDefense: Get at least {value} defense.
 		GotDefense: Got at least {value} defense.
+		CompleteQuest: Complete the quest [{name}].
+		CompletedQuest: The quest [{name}] has been completed.
+		InvalidQuest: This quest objective is invalid.
+		Or: Or
 	}
 
 	TheEnd: THE END

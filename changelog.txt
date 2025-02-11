@@ -1,1 +1,5 @@
-Fixed a bug where certain quest objective progress wasn't being correctly loaded.
+Added new objective type to Modular Quests: The Complete Quest Objective.
+ => This objective will wait until the player completes the specific quest before marking the objective as completed.
+Added IsOr flag to Modular Quest Objective.
+ => Makes so when placed alongside other Or conditions, one of them must be true in order to complete the step.
+Added Eater of Worlds support to Modular Quest Hunt Objective.

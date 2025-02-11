@@ -49,7 +49,7 @@ namespace nterrautils.QuestObjectives
         public override void OnMobKill(NPC killedNpc, ModularQuestBase.ObjectiveData Data)
         {
             HuntObjectiveData d = Data as HuntObjectiveData;
-            if (MonsterIDs.Contains(killedNpc.type) && d.Kills < KillCount)
+            if (MonsterIDs.Contains(killedNpc.type) && d.Kills < KillCount && ExtraChecksCanCount(killedNpc))
             {
                 d.Kills++;
                 if (d.Kills == KillCount)
@@ -57,6 +57,15 @@ namespace nterrautils.QuestObjectives
                     Main.NewText(GetTranslation("AllMobsKilledNotice").Replace("{name}", MonsterName));
                 }
             }
+        }
+
+        bool ExtraChecksCanCount(NPC killedNPC)
+        {
+            if (killedNPC.type == Terraria.ID.NPCID.EaterofWorldsHead || killedNPC.type == Terraria.ID.NPCID.EaterofWorldsTail)
+            {
+                if (NPC.AnyNPCs(Terraria.ID.NPCID.EaterofWorldsBody)) return false;
+            }
+            return true;
         }
 
         public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
@@ -493,6 +502,59 @@ namespace nterrautils.QuestObjectives
         {
             public int DefenseValue = 0;
         }
+    }
+
+    public class CompleteQuestObjectiveBase : ModularQuestBase.ObjectiveBase
+    {
+        public uint QuestID;
+        public string QuestModID;
+        QuestBase quest;
+
+        public CompleteQuestObjectiveBase(uint QuestID, string QuestModID)
+        {
+            this.QuestID = QuestID;
+            this.QuestModID = QuestModID;
+            quest = QuestContainer.GetQuest(QuestID, QuestModID);
+        }
+
+        public override ModularQuestBase.ObjectiveData GetObjectiveData => new CompleteQuestObjectiveData();
+
+        public override void UpdatePlayer(Player player, ModularQuestBase.ObjectiveData data)
+        {
+            if (!quest.IsInvalid)
+            {
+                CompleteQuestObjectiveData Data = data as CompleteQuestObjectiveData;
+                if (Data.data == null)
+                {
+                    Data.data = PlayerMod.GetPlayerQuestData(player, QuestID, QuestModID);
+                }
+                Data.Completed = Data.data.IsCompleted;
+            }
+        }
+
+        public override bool IsCompleted(ModularQuestBase.ObjectiveData Data)
+        {
+            return (Data as CompleteQuestObjectiveData).Completed;
+        }
+
+        public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
+        {
+            CompleteQuestObjectiveData data = (CompleteQuestObjectiveData)Data;
+            if (quest.IsInvalid)
+                return GetTranslation("InvalidQuest");
+            if (data.Completed)
+            {
+                return GetTranslation("CompletedQuest").Replace("{name}", quest.Name);
+            }
+            return GetTranslation("CompleteQuest").Replace("{name}", quest.Name);
+        }
+
+        public class CompleteQuestObjectiveData : ModularQuestBase.ObjectiveData
+        {
+            public bool Completed = false;
+            internal QuestData data = null;
+        }
+
     }
 
     public class MaxStatObjectiveData : ModularQuestBase.ObjectiveData
