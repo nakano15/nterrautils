@@ -514,13 +514,16 @@ namespace nterrautils.QuestObjectives
         {
             this.QuestID = QuestID;
             this.QuestModID = QuestModID;
-            quest = QuestContainer.GetQuest(QuestID, QuestModID);
         }
 
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new CompleteQuestObjectiveData();
 
         public override void UpdatePlayer(Player player, ModularQuestBase.ObjectiveData data)
         {
+            if (quest == null)
+            {
+                quest = QuestContainer.GetQuest(QuestID, QuestModID);
+            }
             if (!quest.IsInvalid)
             {
                 CompleteQuestObjectiveData Data = data as CompleteQuestObjectiveData;
@@ -540,7 +543,7 @@ namespace nterrautils.QuestObjectives
         public override string ObjectiveText(ModularQuestBase.ObjectiveData Data)
         {
             CompleteQuestObjectiveData data = (CompleteQuestObjectiveData)Data;
-            if (quest.IsInvalid)
+            if (quest == null || quest.IsInvalid)
                 return GetTranslation("InvalidQuest");
             if (data.Completed)
             {

@@ -3,3 +3,5 @@ Added new objective type to Modular Quests: The Complete Quest Objective.
 Added IsOr flag to Modular Quest Objective.
  => Makes so when placed alongside other Or conditions, one of them must be true in order to complete the step.
 Added Eater of Worlds support to Modular Quest Hunt Objective.
+Modular quests now show all incomplete objectives the same step has.
+Modular quest steps will no longer proceed when the quest is not active.

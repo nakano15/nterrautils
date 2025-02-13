@@ -41,7 +41,6 @@ Quest: {
 		CompleteQuest: Complete the quest [{name}].
 		CompletedQuest: The quest [{name}] has been completed.
 		InvalidQuest: This quest objective is invalid.
-		Or: Or
 	}
 
 	TheEnd: THE END
@@ -53,6 +52,7 @@ Quest: {
 	Coins: *{coins} coins.
 	Item: * {item}
 	ObjectiveLine: * {objective}
+	Or: Or
 }
 
 Configs: {

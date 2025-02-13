@@ -175,8 +175,8 @@ namespace nterrautils
                         if (ObjectiveText.Length > 0)
                             ObjectiveText += "\n";
                         ObjectiveText += QuestSteps[d.Step].Objectives[o].ObjectiveText(qstepd.ObjectiveDatas[o]);
-                        if (!QuestSteps[d.Step].Objectives[o].IsOr)
-                            return ObjectiveText;
+                        //if (!QuestSteps[d.Step].Objectives[o].IsOr)
+                        //    return ObjectiveText;
                         LastIsOr = true;
                     //}
                 }
@@ -198,6 +198,7 @@ namespace nterrautils
 
         public override void OnMobKill(NPC killedNpc, QuestData data)
         {
+            if (!data.IsActive) return;
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
@@ -206,6 +207,7 @@ namespace nterrautils
 
         public override void UpdatePlayer(Player player, QuestData data)
         {
+            if (!data.IsActive) return;
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
@@ -309,6 +311,7 @@ namespace nterrautils
 
         public override void OnTalkToNpc(NPC npc, QuestData data)
         {
+            if (!data.IsActive) return;
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
@@ -318,6 +321,7 @@ namespace nterrautils
         public override string QuestNpcDialogue(NPC npc, QuestData data, out bool BlockOtherMessages)
         {
             BlockOtherMessages = false;
+            if (!data.IsActive) return "";
             ModularQuestStepData Data = GetCurrentStepData(data);
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return "";
@@ -441,6 +445,15 @@ namespace nterrautils
             if (LatestStep != null)
             {
                 LatestStep.AddNewObjective(new CompleteQuestObjectiveBase(QuestID, QuestModID));
+            }
+        }
+
+        public void SetLatestObjectiveAsOr()
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null && LatestStep.Objectives.Count > 0)
+            {
+                LatestStep.Objectives[LatestStep.Objectives.Count - 1].IsOr = true;
             }
         }
         
