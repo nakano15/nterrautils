@@ -177,7 +177,7 @@ namespace nterrautils
                         ObjectiveText += QuestSteps[d.Step].Objectives[o].ObjectiveText(qstepd.ObjectiveDatas[o]);
                         //if (!QuestSteps[d.Step].Objectives[o].IsOr)
                         //    return ObjectiveText;
-                        LastIsOr = true;
+                        LastIsOr = QuestSteps[d.Step].Objectives[o].IsOr;
                     //}
                 }
                 return ObjectiveText;
