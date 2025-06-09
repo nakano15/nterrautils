@@ -15,10 +15,23 @@ namespace nterrautils
         public List<QuestData> QuestDatas { get { return _QuestDatas; } internal set { _QuestDatas = value; } }
         List<QuestData> _QuestDatas = new List<QuestData>();
         public int TrackedQuest = -1;
+        public List<QuestData> ActiveQuestDatas
+        {
+            get
+            {
+                return _ActiveQuestDatas;
+            }
+        }
+        List<QuestData> _ActiveQuestDatas = new List<QuestData>();
 
         public static List<QuestData> GetPlayerQuests(Player p)
         {
             return p.GetModPlayer<PlayerMod>().QuestDatas;
+        }
+
+        public static List<QuestData> GetPlayerActiveQuests(Player p)
+        {
+            return p.GetModPlayer<PlayerMod>().ActiveQuestDatas;
         }
 
         public static QuestData GetPlayerQuestData(Player p, uint ID, string ModID = "")
@@ -44,6 +57,10 @@ namespace nterrautils
             if (MainMod.GetPlayerCharacter() == Player && (TrackedQuest == -1 || QuestDatas[TrackedQuest].IsCompleted))
             {
                 TrackNewQuest();
+                foreach (QuestData q in QuestDatas)
+                {
+                    q.UpdateQuestStartedStates(Player, true);
+                }
             }
         }
 
@@ -61,9 +78,10 @@ namespace nterrautils
 
         public override void PostUpdate()
         {
+            _ActiveQuestDatas.Clear();
             foreach (QuestData q in QuestDatas)
             {
-                q.Base.UpdatePlayer(Player, q);
+                q.UpdatePlayer(Player);
             }
             NpcMod.UpdateCheckQuestText(Player);
         }

@@ -30,4 +30,41 @@ public class HandyValues
     {
         317, 318
     };
+    public static readonly int[] HornetNPCIDs = new int[]
+    {
+        42, 231, 232, 233, 234, 235
+    };
+    public static readonly int[] AngryBonesNPCIDs = new int[]
+    {
+        31, 294, 295, 296
+    };
+    public static readonly int[] HardmodeDungeonBonesNPCIDs = new int[]
+    {
+        273, 274, 275, 276, 269, 270, 271, 272, 277, 278, 279, 280, 283, 284, 281, 282, 285, 286,
+        293, 291, 292, 287
+    };
+    public static readonly int[] BlueArmoredBonesNPCIDs = new int[]
+    {
+        273, 274, 275, 276
+    };
+    public static readonly int[] RustyArmoredBonesNPCIDs = new int[]
+    {
+        269, 270, 271, 272
+    };
+    public static readonly int[] HellArmoredBonesNPCIDs = new int[]
+    {
+        277, 278, 279, 280
+    };
+    public static readonly int[] NecromancerNPCIDs = new int[]
+    {
+        283, 284
+    };
+    public static readonly int[] RaggedCasterNPCIDs = new int[]
+    {
+        281, 282
+    };
+    public static readonly int[] DiabolistNPCIDs = new int[]
+    {
+        285, 286
+    };
 }

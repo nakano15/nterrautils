@@ -20,6 +20,7 @@ namespace nterrautils
         uint _ID = 0;
         string _ModID = "";
         public bool IsActive { get { return Base.IsQuestActive(this); } }
+        bool LastActive = false;
         public bool IsCompleted { get { return Base.IsQuestCompleted(this); } }
         public string GetObjective { get { return Base.GetQuestCurrentObjective(this); } }
         public string GetStory { get { return Base.QuestStory(this); } }
@@ -50,6 +51,29 @@ namespace nterrautils
         internal void Initialize(QuestBase Quest)
         {
             OnInitialize(Quest);
+        }
+
+        internal void UpdatePlayer(Player player)
+        {
+            Base.UpdatePlayer(player, this);
+            UpdateQuestStartedStates(player);
+        }
+
+        internal void UpdateQuestStartedStates(Player player, bool Silent = false)
+        {
+            if (MainMod.GetPlayerCharacter() == player)
+            {
+                bool NewActive = IsActive;
+                if (!Silent && NewActive && !LastActive)
+                {
+                    ShowQuestStartedNotification();
+                }
+                LastActive = NewActive;
+                if (NewActive && !IsCompleted)
+                {
+                    player.GetModPlayer<PlayerMod>().ActiveQuestDatas.Add(this);
+                }
+            }
         }
 
         protected virtual void OnInitialize(QuestBase Quest)

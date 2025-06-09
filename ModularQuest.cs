@@ -4,6 +4,7 @@ using Terraria;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
 using nterrautils.QuestObjectives;
+using Terraria.ModLoader;
 
 namespace nterrautils
 {
@@ -203,6 +204,15 @@ namespace nterrautils
             ModularQuestStep Base = GetCurrentStep(data);
             if (Data == null || Base == null) return;
             Base.OnMobKill(killedNpc, Data);
+        }
+
+        public override void ModifySpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo, QuestData data)
+        {
+            if (!data.IsActive) return;
+            ModularQuestStepData Data = GetCurrentStepData(data);
+            ModularQuestStep Base = GetCurrentStep(data);
+            if (Data == null || Base == null) return;
+            Base.ModifySpawnPool(pool, spawnInfo, Data);
         }
 
         public override void UpdatePlayer(Player player, QuestData data)
@@ -584,6 +594,14 @@ namespace nterrautils
                 }
             }
 
+            public virtual void ModifySpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo, ModularQuestStepData data)
+            {
+                for(int o = 0; o < Objectives.Count; o++)
+                {
+                    Objectives[o].ModifySpawnPool(pool, spawnInfo, data.ObjectiveDatas[o]);
+                }
+            }
+
             public virtual string QuestNpcDialogue(NPC npc, ModularQuestStepData data, out bool BlockOtherMessages)
             {
                 BlockOtherMessages = false;
@@ -703,6 +721,11 @@ namespace nterrautils
             public virtual void OnStepChange(Player player, ObjectiveData data)
             {
 
+            }
+
+            public virtual void ModifySpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo, ObjectiveData data)
+            {
+                
             }
 
             public virtual string QuestNpcDialogue(NPC npc, ObjectiveData data, out bool BlockOtherMessages)

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace nterrautils
 {
@@ -58,6 +60,11 @@ namespace nterrautils
         public virtual void OnTalkToNpc(NPC npc, QuestData data)
         {
 
+        }
+
+        public virtual void ModifySpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo, QuestData data)
+        {
+            
         }
 
         public virtual string QuestNpcDialogue(NPC npc, QuestData data, out bool BlockOtherMessages)

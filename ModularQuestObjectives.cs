@@ -4,6 +4,7 @@ using Terraria;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
 using System.Linq;
+using Terraria.ModLoader;
 
 namespace nterrautils.QuestObjectives
 {
@@ -109,7 +110,7 @@ namespace nterrautils.QuestObjectives
 
     public class ItemCollectionObjective : ModularQuestBase.ObjectiveBase
     {
-        public int[] ItemID = new int[]{0};
+        public int[] ItemID = new int[] { 0 };
         public int Stack = 5;
         public string ItemName = "";
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new ItemCollectionData();
@@ -117,7 +118,7 @@ namespace nterrautils.QuestObjectives
 
         public ItemCollectionObjective(int ItemID, int Stack = 5, bool TakeItems = true)
         {
-            this.ItemID = new int[]{ItemID};
+            this.ItemID = new int[] { ItemID };
             this.Stack = Stack;
             ItemName = new Item(ItemID).Name;
             this.TakeItems = TakeItems;
@@ -192,7 +193,7 @@ namespace nterrautils.QuestObjectives
             public int ItemsContained = 0;
         }
     }
-    
+
     public class TalkObjective : ModularQuestBase.ObjectiveBase
     {
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new TalkObjectiveData();
@@ -256,13 +257,13 @@ namespace nterrautils.QuestObjectives
             public override void Save(TagCompound save, string QuestID)
             {
                 save.Add("Version" + QuestID, Version);
-                save.Add("TalkedTo"+QuestID, TalkedTo);
+                save.Add("TalkedTo" + QuestID, TalkedTo);
             }
 
             public override void Load(TagCompound load, string QuestID, ushort LastVersion)
             {
                 int Version = load.Get<ushort>("Version" + QuestID);
-                TalkedTo = load.GetBool("TalkedTo"+QuestID);
+                TalkedTo = load.GetBool("TalkedTo" + QuestID);
             }
         }
     }
@@ -408,7 +409,7 @@ namespace nterrautils.QuestObjectives
             }
         }
     }
-    
+
     public class MaxHealthObjective : ModularQuestBase.ObjectiveBase
     {
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new MaxStatObjectiveData();
@@ -439,7 +440,7 @@ namespace nterrautils.QuestObjectives
             return GetTranslation("GetMaxHealth").Replace("{value}", CurrentDiference.ToString());
         }
     }
-    
+
     public class MaxManaObjective : ModularQuestBase.ObjectiveBase
     {
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new MaxStatObjectiveData();
@@ -475,7 +476,7 @@ namespace nterrautils.QuestObjectives
     {
         public override ModularQuestBase.ObjectiveData GetObjectiveData => new DefenseIncreaseObjectiveData();
         public int DefenseToGet = 0;
-        
+
         public DefenseIncreaseObjective(int DefenseToGet)
         {
             this.DefenseToGet = DefenseToGet;
@@ -558,6 +559,35 @@ namespace nterrautils.QuestObjectives
             internal QuestData data = null;
         }
 
+    }
+
+    public class ModifySpawnsObjectiveData : ModularQuestBase.ObjectiveBase
+    {
+        public List<KeyValuePair<int, float>> Spawns = new List<KeyValuePair<int, float>>();
+        public bool ReplaceSpawns = false;
+
+        public ModifySpawnsObjectiveData(int MobID, float Chance, bool ReplaceSpawns)
+        {
+            this.ReplaceSpawns = ReplaceSpawns;
+            Spawns.Add(new KeyValuePair<int, float>(MobID, Chance));
+        }
+
+        public void AddSpawn(int MobID, float Chance)
+        {
+            Spawns.Add(new KeyValuePair<int, float>(MobID, Chance));
+        }
+
+        public override void ModifySpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo, ModularQuestBase.ObjectiveData data)
+        {
+            if (ReplaceSpawns)
+            {
+                pool.Clear();
+            }
+            foreach (KeyValuePair<int, float> spawn in Spawns)
+            {
+                pool.Add(spawn.Key, spawn.Value);
+            }
+        }
     }
 
     public class MaxStatObjectiveData : ModularQuestBase.ObjectiveData

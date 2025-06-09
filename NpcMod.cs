@@ -17,16 +17,24 @@ namespace nterrautils
         {
             if (npc.AnyInteractions())
             {
-                foreach (QuestData q in PlayerMod.GetPlayerQuests(MainMod.GetPlayerCharacter()))
+                foreach (QuestData q in PlayerMod.GetPlayerActiveQuests(MainMod.GetPlayerCharacter()))
                 {
                     q.Base.OnMobKill(npc, q);
                 }
             }
         }
 
+        public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
+        {
+            foreach (QuestData q in PlayerMod.GetPlayerActiveQuests(spawnInfo.Player))
+            {
+                q.Base.ModifySpawnPool(pool, spawnInfo, q);
+            }
+        }
+
         public override void GetChat(NPC npc, ref string chat)
         {
-            foreach (QuestData q in PlayerMod.GetPlayerQuests(MainMod.GetPlayerCharacter()))
+            foreach (QuestData q in PlayerMod.GetPlayerActiveQuests(MainMod.GetPlayerCharacter()))
             {
                 string s = q.Base.QuestNpcDialogue(npc, q, out bool BlockOtherMessages);
                 if (s != "" && s != null)
