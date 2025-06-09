@@ -138,11 +138,13 @@ namespace nterrautils
                 bool LastIsOr = false;
                 for(int i = 0; i < QuestSteps[d.Step].Objectives.Count; i++)
                 {
+                    string ObjectiveText = QuestSteps[d.Step].Objectives[i].ObjectiveText(d.StepDatas[d.Step].ObjectiveDatas[i]);
+                    if (ObjectiveText.Length == 0) continue;
                     if (LastIsOr && QuestSteps[d.Step].Objectives[i].IsOr)
                     {
                         Text += "\n" + GetTranslation("Or");
                     }
-                    Text += "\n" + GetTranslation("ObjectiveLine").Replace("{objective}", QuestSteps[d.Step].Objectives[i].ObjectiveText(d.StepDatas[d.Step].ObjectiveDatas[i]));
+                    Text += "\n" + GetTranslation("ObjectiveLine").Replace("{objective}", ObjectiveText);
                     LastIsOr = QuestSteps[d.Step].Objectives[i].IsOr;
                 }
             }
@@ -165,21 +167,18 @@ namespace nterrautils
                 string ObjectiveText = "";
                 for(int o = 0; o < qstepd.ObjectiveDatas.Length; o++)
                 {
-                    //if (!QuestSteps[d.Step].Objectives[o].IsCompleted(qstepd.ObjectiveDatas[o]))
-                    //{
-                        if (LastIsOr)
-                        {
-                            if (!QuestSteps[d.Step].Objectives[o].IsOr)
-                                return ObjectiveText;
-                            ObjectiveText += "\n" + GetTranslation("Or");
-                        }
-                        if (ObjectiveText.Length > 0)
-                            ObjectiveText += "\n";
-                        ObjectiveText += QuestSteps[d.Step].Objectives[o].ObjectiveText(qstepd.ObjectiveDatas[o]);
-                        //if (!QuestSteps[d.Step].Objectives[o].IsOr)
-                        //    return ObjectiveText;
-                        LastIsOr = QuestSteps[d.Step].Objectives[o].IsOr;
-                    //}
+                    string Text = QuestSteps[d.Step].Objectives[o].ObjectiveText(qstepd.ObjectiveDatas[o]);
+                    if (Text == "") continue;
+                    if (LastIsOr)
+                    {
+                        if (!QuestSteps[d.Step].Objectives[o].IsOr)
+                            return ObjectiveText;
+                        ObjectiveText += "\n" + GetTranslation("Or");
+                    }
+                    if (ObjectiveText.Length > 0)
+                        ObjectiveText += "\n";
+                    ObjectiveText += Text;
+                    LastIsOr = QuestSteps[d.Step].Objectives[o].IsOr;
                 }
                 return ObjectiveText;
             }
@@ -456,6 +455,18 @@ namespace nterrautils
             {
                 LatestStep.AddNewObjective(new CompleteQuestObjectiveBase(QuestID, QuestModID));
             }
+        }
+
+        protected ModifySpawnsObjectiveData AddModifySpawnsObjective(int MobID, float Chance, bool ReplaceSpawns)
+        {
+            ModularQuestStep LatestStep = GetLatestStep();
+            if (LatestStep != null)
+            {
+                ModifySpawnsObjectiveData spawn = new ModifySpawnsObjectiveData(MobID, Chance, ReplaceSpawns);
+                LatestStep.AddNewObjective(spawn);
+                return spawn;
+            }
+            return null;
         }
 
         public void SetLatestObjectiveAsOr()
