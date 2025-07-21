@@ -1,2 +1,1 @@
-Fixed bug with the mod incorrectly telling that quests have started when entering the world.
-The mod will now tell in the chat when quests are completed.
+Definitelly fixed the issue where the game would tell about quests started when entering the world.
