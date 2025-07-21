@@ -1,4 +1,2 @@
-The mod will now let you know when a quest has been started.
-Added more Handy Values for Hornet ids and Dungeon Skeleton ids, including one containing all Hardmode Dungeon Skeleton ids.
-Added a hook to the QuestBase for Modifying Spawn.
- => ModularQuestBase also got objective for modifying spawn.
+Fixed bug with the mod incorrectly telling that quests have started when entering the world.
+The mod will now tell in the chat when quests are completed.

@@ -20,7 +20,7 @@ namespace nterrautils
         uint _ID = 0;
         string _ModID = "";
         public bool IsActive { get { return Base.IsQuestActive(this); } }
-        bool LastActive = false;
+        bool LastActive = false, LastCompleted = false;
         public bool IsCompleted { get { return Base.IsQuestCompleted(this); } }
         public string GetObjective { get { return Base.GetQuestCurrentObjective(this); } }
         public string GetStory { get { return Base.QuestStory(this); } }
@@ -34,6 +34,7 @@ namespace nterrautils
         public void ShowQuestCompletedNotification()
         {
             Main.NewText("[" + Name + "] quest has been completed.", Microsoft.Xna.Framework.Color.Chocolate);
+            LastCompleted = true;
         }
 
         internal void SaveQuest(TagCompound save, string QuestID)
@@ -64,11 +65,16 @@ namespace nterrautils
             if (MainMod.GetPlayerCharacter() == player)
             {
                 bool NewActive = IsActive;
-                if (!Silent && NewActive && !LastActive)
+                bool NewCompleted = IsCompleted;
+                if (!Silent)
                 {
-                    ShowQuestStartedNotification();
+                    if (NewActive && !LastActive)
+                        ShowQuestStartedNotification();
+                    if (NewCompleted && !LastCompleted)
+                        ShowQuestCompletedNotification();
                 }
                 LastActive = NewActive;
+                LastCompleted = NewCompleted;
                 if (NewActive && !IsCompleted)
                 {
                     player.GetModPlayer<PlayerMod>().ActiveQuestDatas.Add(this);
